@@ -1,6 +1,6 @@
 using System;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.UI.WebControls;
 using System.Web.Security;
@@ -25,7 +25,7 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
 
     private void LoadEvents(string search = "")
     {
-        using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(connectionString))
         {
             string query = "SELECT * FROM Events";
             if (!string.IsNullOrEmpty(search))
@@ -34,14 +34,14 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
             }
             query += " ORDER BY EventDate DESC";
 
-            using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 if (!string.IsNullOrEmpty(search))
                 {
                     cmd.Parameters.AddWithValue("@search", "%" + search + "%");
                 }
 
-                using (SQLiteDataAdapter da = new SQLiteDataAdapter(cmd))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
@@ -80,6 +80,7 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         txtEventName.Text = "";
         txtEventDate.Text = "";
         txtLocation.Text = "";
+        txtTicketPrice.Text = "";
         litFormTitle.Text = "Add New Event";
         btnSave.Text = "Save";
     }
@@ -91,26 +92,28 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         string name = txtEventName.Text.Trim();
         string date = txtEventDate.Text.Trim();
         string location = txtLocation.Text.Trim();
+        decimal price = decimal.Parse(txtTicketPrice.Text.Trim());
         string id = hfEventId.Value;
 
-        using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(connectionString))
         {
             conn.Open();
             string query;
             if (string.IsNullOrEmpty(id))
             {
-                query = "INSERT INTO Events (Name, EventDate, Location) VALUES (@name, @date, @location)";
+                query = "INSERT INTO Events (Name, EventDate, Location, TicketPrice) VALUES (@name, @date, @location, @price)";
             }
             else
             {
-                query = "UPDATE Events SET Name=@name, EventDate=@date, Location=@location WHERE Id=@id";
+                query = "UPDATE Events SET Name=@name, EventDate=@date, Location=@location, TicketPrice=@price WHERE Id=@id";
             }
 
-            using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@name", name);
                 cmd.Parameters.AddWithValue("@date", date);
                 cmd.Parameters.AddWithValue("@location", location);
+                cmd.Parameters.AddWithValue("@price", price);
                 if (!string.IsNullOrEmpty(id))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -125,25 +128,25 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
 
     protected void gvEvents_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        int id = Convert.ToInt32(e.CommandArgument);
-
         if (e.CommandName == "EditEvent")
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            int id = Convert.ToInt32(e.CommandArgument);
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "SELECT * FROM Events WHERE Id = @id";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
-                    using (SQLiteDataReader dr = cmd.ExecuteReader())
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
                         if (dr.Read())
                         {
                             hfEventId.Value = dr["Id"].ToString();
                             txtEventName.Text = dr["Name"].ToString();
-                            txtEventDate.Text = dr["EventDate"].ToString();
+                            txtEventDate.Text = Convert.ToDateTime(dr["EventDate"]).ToString("yyyy-MM-dd");
                             txtLocation.Text = dr["Location"].ToString();
+                            txtTicketPrice.Text = dr["TicketPrice"].ToString();
                             litFormTitle.Text = "Edit Event";
                             btnSave.Text = "Update";
                         }
@@ -153,11 +156,12 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         }
         else if (e.CommandName == "DeleteEvent")
         {
-            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            int id = Convert.ToInt32(e.CommandArgument);
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "DELETE FROM Events WHERE Id = @id";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();

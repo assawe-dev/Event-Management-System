@@ -1,69 +1,130 @@
 <%@ Page Language="C#" AutoEventWireup="true" CodeFile="Dashboard.aspx.cs" Inherits="Dashboard" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head runat="server">
-    <title>Dashboard - EMS</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | EMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --success: #4cc9f0;
+            --dark: #212529;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7fe; }
+
+        /* Navbar */
+        .navbar { background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; }
+        .navbar-brand { font-weight: 700; color: var(--primary); font-size: 1.5rem; }
+        .nav-link { font-weight: 500; color: #6c757d; margin: 0 10px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        .btn-logout { border-radius: 10px; padding: 8px 20px; font-weight: 600; }
+
+        /* Dashboard Header */
+        .welcome-section { background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); border-radius: 20px; padding: 40px; color: white; margin-bottom: 40px; position: relative; overflow: hidden; }
+        .welcome-section h1 { font-weight: 700; z-index: 2; position: relative; }
+        .welcome-section p { opacity: 0.9; z-index: 2; position: relative; }
+        .welcome-section i.bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 10rem; opacity: 0.1; transform: rotate(-15deg); }
+
+        /* Cards */
+        .card-menu { border: none; border-radius: 20px; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.03); height: 100%; overflow: hidden; }
+        .card-menu:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .card-icon { width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+        .icon-admin { background: rgba(67, 97, 238, 0.1); color: var(--primary); }
+        .icon-user { background: rgba(76, 201, 240, 0.1); color: var(--accent); }
+        .btn-action { border-radius: 10px; padding: 10px 20px; font-weight: 600; width: 100%; text-align: center; display: inline-block; text-decoration: none; transition: 0.3s; }
+        .btn-admin { background: var(--primary); color: white; }
+        .btn-admin:hover { background: var(--secondary); color: white; }
+        .btn-user { background: var(--accent); color: white; }
+        .btn-user:hover { background: #3ab0d3; color: white; }
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">EMS</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="Dashboard.aspx">Dashboard</a>
-                    </li>
-                    <asp:PlaceHolder ID="phAdminMenu" runat="server" Visible="false">
+        <nav class="navbar navbar-expand-lg sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="Dashboard.aspx">
+                    <i class="fa-solid fa-calendar-check me-2"></i>EMS
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="Admin/ManageEvents.aspx">Manage Events</a>
+                            <a class="nav-link active" href="Dashboard.aspx"><i class="fa-solid fa-house me-1"></i> Dashboard</a>
                         </li>
-                    </asp:PlaceHolder>
-                    <asp:PlaceHolder ID="phUserMenu" runat="server" Visible="false">
-                        <li class="nav-item">
-                            <a class="nav-link" href="User/BrowseEvents.aspx">Browse Events</a>
-                        </li>
-                    </asp:PlaceHolder>
-                </ul>
-                <span class="navbar-text mr-3">
-                    Welcome, <asp:Literal ID="litUsername" runat="server"></asp:Literal>
-                </span>
-                <asp:Button ID="btnLogout" runat="server" Text="Logout" CssClass="btn btn-outline-light btn-sm" OnClick="btnLogout_Click" CausesValidation="false" />
+                        <asp:PlaceHolder ID="phAdminMenu" runat="server" Visible="false">
+                            <li class="nav-item">
+                                <a class="nav-link" href="Admin/ManageEvents.aspx"><i class="fa-solid fa-list-check me-1"></i> Manage Events</a>
+                            </li>
+                        </asp:PlaceHolder>
+                        <asp:PlaceHolder ID="phUserMenu" runat="server" Visible="false">
+                            <li class="nav-item">
+                                <a class="nav-link" href="User/BrowseEvents.aspx"><i class="fa-solid fa-magnifying-glass me-1"></i> Browse Events</a>
+                            </li>
+                        </asp:PlaceHolder>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3 text-secondary small fw-bold">
+                            <i class="fa-solid fa-circle-user me-1 text-primary"></i>
+                            <asp:Literal ID="litUsername" runat="server"></asp:Literal>
+                        </span>
+                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-outline-danger btn-logout btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </asp:LinkButton>
+                    </div>
+                </div>
             </div>
         </nav>
 
         <div class="container mt-5">
-            <div class="jumbotron">
-                <h1 class="display-4">Welcome to EMS Dashboard</h1>
-                <p class="lead">Select an option from the menu above to get started.</p>
-                <hr class="my-4">
-                <div class="row">
-                    <asp:PlaceHolder ID="phAdminCard" runat="server" Visible="false">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Admin Section</h5>
-                                    <p class="card-text">Manage all events, including add, edit, and delete.</p>
-                                    <a href="Admin/ManageEvents.aspx" class="btn btn-primary">Go to Manage Events</a>
-                                </div>
+            <div class="welcome-section">
+                <h1>Hello, <asp:Literal ID="litUsernameWelcome" runat="server"></asp:Literal>!</h1>
+                <p class="lead mb-0">Welcome back to the Event Management System. What would you like to do today?</p>
+                <i class="fa-solid fa-calendar-days bg-icon"></i>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <asp:PlaceHolder ID="phAdminCard" runat="server" Visible="false">
+                    <div class="col-md-5">
+                        <div class="card card-menu p-4">
+                            <div class="card-icon icon-admin">
+                                <i class="fa-solid fa-screwdriver-wrench"></i>
                             </div>
+                            <h4 class="fw-bold">Admin Management</h4>
+                            <p class="text-muted mb-4">Access administrative tools to create, update, and remove events from the platform. Monitor event details and maintain the database.</p>
+                            <a href="Admin/ManageEvents.aspx" class="btn-action btn-admin">
+                                <i class="fa-solid fa-gears me-2"></i> Manage All Events
+                            </a>
                         </div>
-                    </asp:PlaceHolder>
-                    <asp:PlaceHolder ID="phUserCard" runat="server" Visible="false">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">User Section</h5>
-                                    <p class="card-text">Browse and search for available events.</p>
-                                    <a href="User/BrowseEvents.aspx" class="btn btn-success">Go to Browse Events</a>
-                                </div>
+                    </div>
+                </asp:PlaceHolder>
+
+                <asp:PlaceHolder ID="phUserCard" runat="server" Visible="false">
+                    <div class="col-md-5">
+                        <div class="card card-menu p-4">
+                            <div class="card-icon icon-user">
+                                <i class="fa-solid fa-ticket"></i>
                             </div>
+                            <h4 class="fw-bold">Explore Events</h4>
+                            <p class="text-muted mb-4">Discover upcoming conferences, workshops, and meetups. Search by name or location to find the events that interest you most.</p>
+                            <a href="User/BrowseEvents.aspx" class="btn-action btn-user">
+                                <i class="fa-solid fa-compass me-2"></i> Browse & Book
+                            </a>
                         </div>
-                    </asp:PlaceHolder>
-                </div>
+                    </div>
+                </asp:PlaceHolder>
             </div>
         </div>
     </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
