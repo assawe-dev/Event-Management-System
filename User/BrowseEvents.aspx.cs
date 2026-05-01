@@ -1,6 +1,6 @@
 using System;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Configuration;
 using System.Web.Security;
 
@@ -24,7 +24,7 @@ public partial class User_BrowseEvents : System.Web.UI.Page
 
     private void LoadEvents(string search = "")
     {
-        using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(connectionString))
         {
             string query = "SELECT * FROM Events";
             if (!string.IsNullOrEmpty(search))
@@ -33,14 +33,14 @@ public partial class User_BrowseEvents : System.Web.UI.Page
             }
             query += " ORDER BY EventDate ASC";
 
-            using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 if (!string.IsNullOrEmpty(search))
                 {
                     cmd.Parameters.AddWithValue("@search", "%" + search + "%");
                 }
 
-                using (SQLiteDataAdapter da = new SQLiteDataAdapter(cmd))
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
