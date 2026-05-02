@@ -63,6 +63,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="BrowseEvents.aspx"><i class="fa-solid fa-magnifying-glass me-1"></i> Browse Events</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="MyBookings.aspx"><i class="fa-solid fa-ticket me-1"></i> My Bookings</a>
+                        </li>
                     </ul>
                     <div class="d-flex align-items-center">
                         <span class="me-3 text-secondary small fw-bold">
@@ -85,6 +88,12 @@
         </section>
 
         <div class="container">
+            <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa-solid fa-circle-check me-2"></i>
+                <asp:Literal ID="litMessage" runat="server"></asp:Literal>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </asp:Panel>
+
             <div class="search-container mb-5">
                 <div class="row g-3">
                     <div class="col-md-9">
@@ -104,7 +113,7 @@
                 </div>
             </div>
 
-            <asp:Repeater ID="rptEvents" runat="server">
+            <asp:Repeater ID="rptEvents" runat="server" OnItemCommand="rptEvents_ItemCommand">
                 <HeaderTemplate>
                     <div class="row g-4">
                 </HeaderTemplate>
@@ -128,7 +137,9 @@
                                     <%# Eval("Location") %>
                                 </p>
                                 <div class="mt-4">
-                                    <a href="#" class="btn btn-view">Get Tickets</a>
+                                    <asp:LinkButton ID="btnBook" runat="server" CssClass="btn btn-view" CommandName="Book" CommandArgument='<%# Eval("EventID") %>'>
+                                        <i class="fa-solid fa-ticket me-1"></i> Book Now
+                                    </asp:LinkButton>
                                 </div>
                             </div>
                         </div>

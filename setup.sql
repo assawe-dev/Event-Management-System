@@ -11,7 +11,17 @@ CREATE TABLE Users (
     UserID INT PRIMARY KEY IDENTITY(1,1),
     Username NVARCHAR(50) NOT NULL UNIQUE,
     Password NVARCHAR(100) NOT NULL,
+    FullName NVARCHAR(100) NOT NULL,
     Role NVARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Bookings (
+    BookingID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    EventID INT NOT NULL,
+    BookingDate DATETIME NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (EventID) REFERENCES Events(EventID)
 );
 
 -- Seed some data for Events
@@ -21,6 +31,6 @@ INSERT INTO Events (EventName, Location, EventDate, Capacity, AvailableSeats) VA
 INSERT INTO Events (EventName, Location, EventDate, Capacity, AvailableSeats) VALUES ('Networking Mixer', 'Austin, TX', '2025-12-12', 150, 120);
 
 -- Seed some data for Users
-INSERT INTO Users (Username, Password, Role) VALUES ('admin', 'admin123', 'Admin');
-INSERT INTO Users (Username, Password, Role) VALUES ('user', 'user123', 'User');
-INSERT INTO Users (Username, Password, Role) VALUES ('employee', 'emp123', 'Employee');
+INSERT INTO Users (Username, Password, FullName, Role) VALUES ('admin', 'admin123', 'System Administrator', 'Admin');
+INSERT INTO Users (Username, Password, FullName, Role) VALUES ('user', 'user123', 'John Doe', 'User');
+INSERT INTO Users (Username, Password, FullName, Role) VALUES ('employee', 'emp123', 'Jane Smith', 'Employee');
