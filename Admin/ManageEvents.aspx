@@ -86,6 +86,11 @@
         </div>
 
         <div class="container pb-5">
+            <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert alert-dismissible fade show" role="alert">
+                <asp:Label ID="lblMessage" runat="server"></asp:Label>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </asp:Panel>
+
             <div class="card form-section mb-4">
                 <h5 class="fw-bold mb-4 text-primary">
                     <i class="fa-solid fa-pen-to-square me-2"></i>
@@ -114,14 +119,23 @@
                         <asp:RequiredFieldValidator ID="rfvLocation" runat="server" ControlToValidate="txtLocation"
                             ErrorMessage="Location is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold small">Price ($)</label>
-                        <asp:TextBox ID="txtTicketPrice" runat="server" CssClass="form-control" placeholder="0.00"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvPrice" runat="server" ControlToValidate="txtTicketPrice"
-                            ErrorMessage="Price is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="revPrice" runat="server" ControlToValidate="txtTicketPrice"
-                            ValidationExpression="^\d+(\.\d{1,2})?$" ErrorMessage="Invalid price"
-                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RegularExpressionValidator>
+                    <div class="col-md-1">
+                        <label class="form-label fw-semibold small">Capacity</label>
+                        <asp:TextBox ID="txtCapacity" runat="server" CssClass="form-control" placeholder="0"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvCapacity" runat="server" ControlToValidate="txtCapacity"
+                            ErrorMessage="Required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
+                        <asp:RangeValidator ID="rvCapacity" runat="server" ControlToValidate="txtCapacity"
+                            MinimumValue="0" MaximumValue="1000000" Type="Integer" ErrorMessage="Invalid"
+                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RangeValidator>
+                    </div>
+                    <div class="col-md-1">
+                        <label class="form-label fw-semibold small">Available</label>
+                        <asp:TextBox ID="txtAvailableSeats" runat="server" CssClass="form-control" placeholder="0"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvAvailable" runat="server" ControlToValidate="txtAvailableSeats"
+                            ErrorMessage="Required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
+                        <asp:CompareValidator ID="cvAvailable" runat="server" ControlToValidate="txtAvailableSeats"
+                            ControlToCompare="txtCapacity" Operator="LessThanEqual" Type="Integer"
+                            ErrorMessage="Must be <= Capacity" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:CompareValidator>
                     </div>
                     <div class="col-md-2 d-flex align-items-end gap-2">
                         <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="btn btn-primary w-100" OnClick="btnSave_Click" ValidationGroup="EventForm" />
@@ -132,12 +146,12 @@
 
             <div class="card table-responsive">
                 <asp:GridView ID="gvEvents" runat="server" AutoGenerateColumns="False" CssClass="table table-hover mb-0"
-                    OnRowCommand="gvEvents_RowCommand" DataKeyNames="Id" GridLines="None">
+                    OnRowCommand="gvEvents_RowCommand" DataKeyNames="EventID" GridLines="None">
                     <Columns>
-                        <asp:BoundField DataField="Id" HeaderText="ID" ItemStyle-CssClass="text-muted small" />
+                        <asp:BoundField DataField="EventID" HeaderText="ID" ItemStyle-CssClass="text-muted small" />
                         <asp:TemplateField HeaderText="Event Name">
                             <ItemTemplate>
-                                <span class="fw-bold text-dark"><%# Eval("Name") %></span>
+                                <span class="fw-bold text-dark"><%# Eval("EventName") %></span>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Date">
@@ -150,21 +164,28 @@
                                 <span><i class="fa-solid fa-location-dot me-1 text-danger"></i> <%# Eval("Location") %></span>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Price">
+                        <asp:TemplateField HeaderText="Capacity">
                             <ItemTemplate>
-                                <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                    $<%# Eval("TicketPrice", "{0:F2}") %>
+                                <span class="badge bg-info-subtle text-info border border-info-subtle">
+                                    <%# Eval("Capacity") %>
+                                </span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Available">
+                            <ItemTemplate>
+                                <span class='badge <%# Convert.ToInt32(Eval("AvailableSeats")) > 0 ? "bg-success-subtle text-success border border-success-subtle" : "bg-danger-subtle text-danger border border-danger-subtle" %>'>
+                                    <%# Eval("AvailableSeats") %>
                                 </span>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Actions">
                             <ItemTemplate>
                                 <asp:LinkButton ID="btnEdit" runat="server" CommandName="EditEvent"
-                                    CommandArgument='<%# Eval("Id") %>' CssClass="btn btn-sm btn-outline-warning me-1">
+                                    CommandArgument='<%# Eval("EventID") %>' CssClass="btn btn-sm btn-outline-warning me-1">
                                     <i class="fa-solid fa-pencil"></i>
                                 </asp:LinkButton>
                                 <asp:LinkButton ID="btnDelete" runat="server" CommandName="DeleteEvent"
-                                    CommandArgument='<%# Eval("Id") %>' CssClass="btn btn-sm btn-outline-danger"
+                                    CommandArgument='<%# Eval("EventID") %>' CssClass="btn btn-sm btn-outline-danger"
                                     OnClientClick="return confirm('Are you sure you want to delete this event?');">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </asp:LinkButton>

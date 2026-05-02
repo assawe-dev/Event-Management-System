@@ -100,7 +100,7 @@
                             <div class="event-img">
                                 <i class="fa-solid fa-image"></i>
                                 <div class="price-tag">
-                                    <%# Convert.ToDecimal(Eval("TicketPrice")) == 0 ? "FREE" : "$" + Eval("TicketPrice", "{0:F2}") %>
+                                    <%# Convert.ToInt32(Eval("AvailableSeats")) > 0 ? Eval("AvailableSeats") + " Left" : "SOLD OUT" %>
                                 </div>
                             </div>
                             <div class="event-body">
@@ -108,7 +108,7 @@
                                     <i class="fa-regular fa-calendar-days me-1"></i>
                                     <%# Convert.ToDateTime(Eval("EventDate")).ToString("ddd, MMM dd • h:mm tt") %>
                                 </span>
-                                <h5 class="event-title"><%# Eval("Name") %></h5>
+                                <h5 class="event-title"><%# Eval("EventName") %></h5>
                                 <p class="event-info">
                                     <i class="fa-solid fa-location-dot me-1 text-danger"></i>
                                     <%# Eval("Location") %>
