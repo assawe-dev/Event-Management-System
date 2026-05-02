@@ -32,7 +32,14 @@
         .welcome-section p { opacity: 0.9; z-index: 2; position: relative; }
         .welcome-section i.bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 10rem; opacity: 0.1; transform: rotate(-15deg); }
 
-        /* Cards */
+        /* Stats Cards */
+        .stat-card { border: none; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.3s; background: white; height: 100%; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
+        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 15px; }
+        .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+        .stat-label { color: #6c757d; font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Menu Cards */
         .card-menu { border: none; border-radius: 20px; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.03); height: 100%; overflow: hidden; }
         .card-menu:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
         .card-icon { width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
@@ -64,6 +71,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="Admin/ManageEvents.aspx"><i class="fa-solid fa-list-check me-1"></i> Manage Events</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="Admin/ManageUsers.aspx"><i class="fa-solid fa-users me-1"></i> Manage Users</a>
+                            </li>
                         </asp:PlaceHolder>
                         <asp:PlaceHolder ID="phUserMenu" runat="server" Visible="false">
                             <li class="nav-item">
@@ -84,16 +94,47 @@
             </div>
         </nav>
 
-        <div class="container mt-5">
+        <div class="container mt-5 pb-5">
             <div class="welcome-section">
                 <h1>Hello, <asp:Literal ID="litUsernameWelcome" runat="server"></asp:Literal>!</h1>
                 <p class="lead mb-0">Welcome back to the Event Management System. What would you like to do today?</p>
                 <i class="fa-solid fa-calendar-days bg-icon"></i>
             </div>
 
+            <!-- Statistics Section -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-primary-subtle text-primary">
+                            <i class="fa-solid fa-calendar-star"></i>
+                        </div>
+                        <div class="stat-value"><asp:Literal ID="litTotalEvents" runat="server"></asp:Literal></div>
+                        <div class="stat-label">Total Events</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-info-subtle text-info">
+                            <i class="fa-solid fa-users-gear"></i>
+                        </div>
+                        <div class="stat-value"><asp:Literal ID="litTotalUsers" runat="server"></asp:Literal></div>
+                        <div class="stat-label">System Users</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success-subtle text-success">
+                            <i class="fa-solid fa-chair"></i>
+                        </div>
+                        <div class="stat-value"><asp:Literal ID="litTotalCapacity" runat="server"></asp:Literal></div>
+                        <div class="stat-label">Total Capacity</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row g-4 justify-content-center">
                 <asp:PlaceHolder ID="phAdminCard" runat="server" Visible="false">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="card card-menu p-4">
                             <div class="card-icon icon-admin">
                                 <i class="fa-solid fa-screwdriver-wrench"></i>
@@ -102,6 +143,18 @@
                             <p class="text-muted mb-4">Access administrative tools to create, update, and remove events from the platform. Monitor event details and maintain the database.</p>
                             <a href="Admin/ManageEvents.aspx" class="btn-action btn-admin">
                                 <i class="fa-solid fa-gears me-2"></i> Manage All Events
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-menu p-4">
+                            <div class="card-icon icon-admin" style="background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <h4 class="fw-bold">User Access</h4>
+                            <p class="text-muted mb-4">Manage platform users, update credentials, and assign roles. Ensure the right people have the right access to the EMS portal.</p>
+                            <a href="Admin/ManageUsers.aspx" class="btn-action btn-admin" style="background: #0d6efd;">
+                                <i class="fa-solid fa-users-cog me-2"></i> Manage Users
                             </a>
                         </div>
                     </div>
