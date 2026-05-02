@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 
-public partial class Admin_ManageEvents : System.Web.UI.Page
+public partial class Admin_ManageUsers : System.Web.UI.Page
 {
     private string connectionString = ConfigurationManager.ConnectionStrings["EventDb"].ConnectionString;
 
@@ -21,20 +21,20 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
 
         if (!IsPostBack)
         {
-            LoadEvents();
+            LoadUsers();
         }
     }
 
-    private void LoadEvents(string search = "")
+    private void LoadUsers(string search = "")
     {
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            string query = "SELECT * FROM Events";
+            string query = "SELECT UserID, Username, Role FROM Users";
             if (!string.IsNullOrEmpty(search))
             {
-                query += " WHERE EventName LIKE @search OR Location LIKE @search";
+                query += " WHERE Username LIKE @search";
             }
-            query += " ORDER BY EventDate DESC";
+            query += " ORDER BY Username ASC";
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
@@ -47,8 +47,8 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
-                    gvEvents.DataSource = dt;
-                    gvEvents.DataBind();
+                    gvUsers.DataSource = dt;
+                    gvUsers.DataBind();
                 }
             }
         }
@@ -56,13 +56,13 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
-        LoadEvents(txtSearch.Text.Trim());
+        LoadUsers(txtSearch.Text.Trim());
     }
 
     protected void btnClearSearch_Click(object sender, EventArgs e)
     {
         txtSearch.Text = "";
-        LoadEvents();
+        LoadUsers();
     }
 
     protected void btnLogout_Click(object sender, EventArgs e)
@@ -79,13 +79,11 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
 
     private void ResetForm()
     {
-        hfEventId.Value = "";
-        txtEventName.Text = "";
-        txtEventDate.Text = "";
-        txtLocation.Text = "";
-        txtCapacity.Text = "";
-        txtAvailableSeats.Text = "";
-        litFormTitle.Text = "Add New Event";
+        hfUserId.Value = "";
+        txtUsername.Text = "";
+        txtPassword.Text = "";
+        ddlRole.SelectedIndex = 0;
+        litFormTitle.Text = "Add New User";
         btnSave.Text = "Save";
         pnlMessage.Visible = false;
     }
@@ -101,12 +99,10 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
     {
         if (!Page.IsValid) return;
 
-        string name = txtEventName.Text.Trim();
-        string date = txtEventDate.Text.Trim();
-        string location = txtLocation.Text.Trim();
-        int capacity = int.Parse(txtCapacity.Text.Trim());
-        int available = int.Parse(txtAvailableSeats.Text.Trim());
-        string id = hfEventId.Value;
+        string username = txtUsername.Text.Trim();
+        string password = txtPassword.Text.Trim();
+        string role = ddlRole.SelectedValue;
+        string id = hfUserId.Value;
 
         try
         {
@@ -116,20 +112,18 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                 string query;
                 if (string.IsNullOrEmpty(id))
                 {
-                    query = "INSERT INTO Events (EventName, EventDate, Location, Capacity, AvailableSeats) VALUES (@name, @date, @location, @capacity, @available)";
+                    query = "INSERT INTO Users (Username, Password, Role) VALUES (@username, @password, @role)";
                 }
                 else
                 {
-                    query = "UPDATE Events SET EventName=@name, EventDate=@date, Location=@location, Capacity=@capacity, AvailableSeats=@available WHERE EventID=@id";
+                    query = "UPDATE Users SET Username=@username, Password=@password, Role=@role WHERE UserID=@id";
                 }
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@name", name);
-                    cmd.Parameters.AddWithValue("@date", date);
-                    cmd.Parameters.AddWithValue("@location", location);
-                    cmd.Parameters.AddWithValue("@capacity", capacity);
-                    cmd.Parameters.AddWithValue("@available", available);
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@password", password);
+                    cmd.Parameters.AddWithValue("@role", role);
                     if (!string.IsNullOrEmpty(id))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
@@ -138,9 +132,9 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                 }
             }
 
-            string msg = string.IsNullOrEmpty(id) ? "Event added successfully!" : "Event updated!";
+            string msg = string.IsNullOrEmpty(id) ? "User added successfully!" : "User updated!";
             ResetForm();
-            LoadEvents();
+            LoadUsers();
             ShowMessage(msg, "alert-success");
         }
         catch (Exception ex)
@@ -149,15 +143,15 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         }
     }
 
-    protected void gvEvents_RowCommand(object sender, GridViewCommandEventArgs e)
+    protected void gvUsers_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        if (e.CommandName == "EditEvent")
+        if (e.CommandName == "EditUser")
         {
             int id = Convert.ToInt32(e.CommandArgument);
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                string query = "SELECT * FROM Events WHERE EventID = @id";
+                string query = "SELECT * FROM Users WHERE UserID = @id";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -165,13 +159,11 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                     {
                         if (dr.Read())
                         {
-                            hfEventId.Value = dr["EventID"].ToString();
-                            txtEventName.Text = dr["EventName"].ToString();
-                            txtEventDate.Text = Convert.ToDateTime(dr["EventDate"]).ToString("yyyy-MM-dd");
-                            txtLocation.Text = dr["Location"].ToString();
-                            txtCapacity.Text = dr["Capacity"].ToString();
-                            txtAvailableSeats.Text = dr["AvailableSeats"].ToString();
-                            litFormTitle.Text = "Edit Event";
+                            hfUserId.Value = dr["UserID"].ToString();
+                            txtUsername.Text = dr["Username"].ToString();
+                            txtPassword.Text = dr["Password"].ToString();
+                            ddlRole.SelectedValue = dr["Role"].ToString();
+                            litFormTitle.Text = "Edit User";
                             btnSave.Text = "Update";
                             pnlMessage.Visible = false;
                         }
@@ -179,7 +171,7 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                 }
             }
         }
-        else if (e.CommandName == "DeleteEvent")
+        else if (e.CommandName == "DeleteUser")
         {
             try
             {
@@ -187,19 +179,19 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "DELETE FROM Events WHERE EventID = @id";
+                    string query = "DELETE FROM Users WHERE UserID = @id";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
                         cmd.ExecuteNonQuery();
                     }
                 }
-                LoadEvents();
-                ShowMessage("Event deleted!", "alert-success");
+                LoadUsers();
+                ShowMessage("User deleted!", "alert-success");
             }
             catch (Exception ex)
             {
-                ShowMessage("Error deleting event: " + ex.Message, "alert-danger");
+                ShowMessage("Error deleting user: " + ex.Message, "alert-danger");
             }
         }
     }

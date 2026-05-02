@@ -52,13 +52,27 @@
                         <li class="nav-item">
                             <a class="nav-link" href="../Dashboard.aspx"><i class="fa-solid fa-house me-1"></i> Dashboard</a>
                         </li>
+                        <asp:PlaceHolder ID="phAdminMenu" runat="server" Visible="false">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../Admin/ManageEvents.aspx"><i class="fa-solid fa-list-check me-1"></i> Manage Events</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="../Admin/ManageUsers.aspx"><i class="fa-solid fa-users me-1"></i> Manage Users</a>
+                            </li>
+                        </asp:PlaceHolder>
                         <li class="nav-item">
                             <a class="nav-link active" href="BrowseEvents.aspx"><i class="fa-solid fa-magnifying-glass me-1"></i> Browse Events</a>
                         </li>
                     </ul>
-                    <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-outline-danger btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
-                        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
-                    </asp:LinkButton>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3 text-secondary small fw-bold">
+                            <i class="fa-solid fa-circle-user me-1 text-primary"></i>
+                            <asp:Literal ID="litUsernameNav" runat="server"></asp:Literal>
+                        </span>
+                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-outline-danger btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </asp:LinkButton>
+                    </div>
                 </div>
             </div>
         </nav>

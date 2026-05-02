@@ -57,10 +57,19 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="ManageEvents.aspx"><i class="fa-solid fa-list-check me-1"></i> Manage Events</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="ManageUsers.aspx"><i class="fa-solid fa-users me-1"></i> Manage Users</a>
+                        </li>
                     </ul>
-                    <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-outline-danger btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
-                        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
-                    </asp:LinkButton>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3 text-secondary small fw-bold">
+                            <i class="fa-solid fa-circle-user me-1 text-primary"></i>
+                            <asp:Literal ID="litUsernameNav" runat="server"></asp:Literal>
+                        </span>
+                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-outline-danger btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </asp:LinkButton>
+                    </div>
                 </div>
             </div>
         </nav>

@@ -1,9 +1,13 @@
 using System;
 using System.Web;
 using System.Web.Security;
+using System.Data.SqlClient;
+using System.Configuration;
 
 public partial class Login : System.Web.UI.Page
 {
+    private string connectionString = ConfigurationManager.ConnectionStrings["EventDb"].ConnectionString;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (User.Identity.IsAuthenticated)
@@ -17,20 +21,24 @@ public partial class Login : System.Web.UI.Page
         string username = txtUsername.Text.Trim();
         string password = txtPassword.Text.Trim();
 
-        // Hardcoded users for demonstration as requested/implied by university project setup
-        // In a real app, these would be in the database
         string role = "";
         bool isValid = false;
 
-        if (username == "admin" && password == "admin123")
+        using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            isValid = true;
-            role = "Admin";
-        }
-        else if (username == "user" && password == "user123")
-        {
-            isValid = true;
-            role = "User";
+            string query = "SELECT Role FROM Users WHERE Username = @Username AND Password = @Password";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Username", username);
+                cmd.Parameters.AddWithValue("@Password", password);
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    isValid = true;
+                    role = result.ToString();
+                }
+            }
         }
 
         if (isValid)
@@ -54,6 +62,7 @@ public partial class Login : System.Web.UI.Page
 
             Response.Cookies.Add(cookie);
             Session["Role"] = role;
+            Session["Username"] = username;
             Response.Redirect("Dashboard.aspx");
         }
         else

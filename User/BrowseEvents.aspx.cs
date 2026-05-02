@@ -16,6 +16,14 @@ public partial class User_BrowseEvents : System.Web.UI.Page
             return;
         }
 
+        litUsernameNav.Text = User.Identity.Name;
+
+        string role = Session["Role"] as string;
+        if (role == "Admin")
+        {
+            phAdminMenu.Visible = true;
+        }
+
         if (!IsPostBack)
         {
             LoadEvents();
