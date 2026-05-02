@@ -53,6 +53,7 @@ public partial class Login : System.Web.UI.Page
             }
 
             Response.Cookies.Add(cookie);
+            Session["Role"] = role;
             Response.Redirect("Dashboard.aspx");
         }
         else

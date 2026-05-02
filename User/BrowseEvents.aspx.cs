@@ -29,7 +29,7 @@ public partial class User_BrowseEvents : System.Web.UI.Page
             string query = "SELECT * FROM Events";
             if (!string.IsNullOrEmpty(search))
             {
-                query += " WHERE Name LIKE @search OR Location LIKE @search";
+                query += " WHERE EventName LIKE @search OR Location LIKE @search";
             }
             query += " ORDER BY EventDate ASC";
 
@@ -65,6 +65,7 @@ public partial class User_BrowseEvents : System.Web.UI.Page
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         FormsAuthentication.SignOut();
+        Session.Abandon();
         Response.Redirect("../Login.aspx");
     }
 }

@@ -11,7 +11,7 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!User.Identity.IsAuthenticated)
+        if (!User.Identity.IsAuthenticated || Session["Role"] as string != "Admin")
         {
             Response.Redirect("../Login.aspx");
             return;
@@ -30,7 +30,7 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
             string query = "SELECT * FROM Events";
             if (!string.IsNullOrEmpty(search))
             {
-                query += " WHERE Name LIKE @search OR Location LIKE @search";
+                query += " WHERE EventName LIKE @search OR Location LIKE @search";
             }
             query += " ORDER BY EventDate DESC";
 
@@ -66,6 +66,7 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         FormsAuthentication.SignOut();
+        Session.Abandon();
         Response.Redirect("../Login.aspx");
     }
 
@@ -80,9 +81,18 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         txtEventName.Text = "";
         txtEventDate.Text = "";
         txtLocation.Text = "";
-        txtTicketPrice.Text = "";
+        txtCapacity.Text = "";
+        txtAvailableSeats.Text = "";
         litFormTitle.Text = "Add New Event";
         btnSave.Text = "Save";
+        pnlMessage.Visible = false;
+    }
+
+    private void ShowMessage(string message, string cssClass)
+    {
+        lblMessage.Text = message;
+        pnlMessage.CssClass = "alert alert-dismissible fade show " + cssClass;
+        pnlMessage.Visible = true;
     }
 
     protected void btnSave_Click(object sender, EventArgs e)
@@ -92,38 +102,49 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         string name = txtEventName.Text.Trim();
         string date = txtEventDate.Text.Trim();
         string location = txtLocation.Text.Trim();
-        decimal price = decimal.Parse(txtTicketPrice.Text.Trim());
+        int capacity = int.Parse(txtCapacity.Text.Trim());
+        int available = int.Parse(txtAvailableSeats.Text.Trim());
         string id = hfEventId.Value;
 
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        try
         {
-            conn.Open();
-            string query;
-            if (string.IsNullOrEmpty(id))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                query = "INSERT INTO Events (Name, EventDate, Location, TicketPrice) VALUES (@name, @date, @location, @price)";
-            }
-            else
-            {
-                query = "UPDATE Events SET Name=@name, EventDate=@date, Location=@location, TicketPrice=@price WHERE Id=@id";
-            }
-
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                cmd.Parameters.AddWithValue("@name", name);
-                cmd.Parameters.AddWithValue("@date", date);
-                cmd.Parameters.AddWithValue("@location", location);
-                cmd.Parameters.AddWithValue("@price", price);
-                if (!string.IsNullOrEmpty(id))
+                conn.Open();
+                string query;
+                if (string.IsNullOrEmpty(id))
                 {
-                    cmd.Parameters.AddWithValue("@id", id);
+                    query = "INSERT INTO Events (EventName, EventDate, Location, Capacity, AvailableSeats) VALUES (@name, @date, @location, @capacity, @available)";
                 }
-                cmd.ExecuteNonQuery();
-            }
-        }
+                else
+                {
+                    query = "UPDATE Events SET EventName=@name, EventDate=@date, Location=@location, Capacity=@capacity, AvailableSeats=@available WHERE EventID=@id";
+                }
 
-        ResetForm();
-        LoadEvents();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@date", date);
+                    cmd.Parameters.AddWithValue("@location", location);
+                    cmd.Parameters.AddWithValue("@capacity", capacity);
+                    cmd.Parameters.AddWithValue("@available", available);
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                    }
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            string msg = string.IsNullOrEmpty(id) ? "Event added successfully!" : "Event updated!";
+            ResetForm();
+            LoadEvents();
+            ShowMessage(msg, "alert-success");
+        }
+        catch (Exception ex)
+        {
+            ShowMessage("Error: " + ex.Message, "alert-danger");
+        }
     }
 
     protected void gvEvents_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -134,7 +155,7 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                string query = "SELECT * FROM Events WHERE Id = @id";
+                string query = "SELECT * FROM Events WHERE EventID = @id";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -142,13 +163,15 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                     {
                         if (dr.Read())
                         {
-                            hfEventId.Value = dr["Id"].ToString();
-                            txtEventName.Text = dr["Name"].ToString();
+                            hfEventId.Value = dr["EventID"].ToString();
+                            txtEventName.Text = dr["EventName"].ToString();
                             txtEventDate.Text = Convert.ToDateTime(dr["EventDate"]).ToString("yyyy-MM-dd");
                             txtLocation.Text = dr["Location"].ToString();
-                            txtTicketPrice.Text = dr["TicketPrice"].ToString();
+                            txtCapacity.Text = dr["Capacity"].ToString();
+                            txtAvailableSeats.Text = dr["AvailableSeats"].ToString();
                             litFormTitle.Text = "Edit Event";
                             btnSave.Text = "Update";
+                            pnlMessage.Visible = false;
                         }
                     }
                 }
@@ -156,18 +179,26 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         }
         else if (e.CommandName == "DeleteEvent")
         {
-            int id = Convert.ToInt32(e.CommandArgument);
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                conn.Open();
-                string query = "DELETE FROM Events WHERE Id = @id";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                int id = Convert.ToInt32(e.CommandArgument);
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.ExecuteNonQuery();
+                    conn.Open();
+                    string query = "DELETE FROM Events WHERE EventID = @id";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
+                LoadEvents();
+                ShowMessage("Event deleted!", "alert-success");
             }
-            LoadEvents();
+            catch (Exception ex)
+            {
+                ShowMessage("Error deleting event: " + ex.Message, "alert-danger");
+            }
         }
     }
 }

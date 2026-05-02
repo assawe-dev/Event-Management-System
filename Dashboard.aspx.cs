@@ -15,9 +15,7 @@ public partial class Dashboard : System.Web.UI.Page
         litUsername.Text = User.Identity.Name;
         litUsernameWelcome.Text = User.Identity.Name;
 
-        FormsIdentity id = (FormsIdentity)User.Identity;
-        FormsAuthenticationTicket ticket = id.Ticket;
-        string role = ticket.UserData;
+        string role = Session["Role"] as string;
 
         if (role == "Admin")
         {
@@ -34,6 +32,7 @@ public partial class Dashboard : System.Web.UI.Page
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         FormsAuthentication.SignOut();
+        Session.Abandon();
         Response.Redirect("Login.aspx");
     }
 }
