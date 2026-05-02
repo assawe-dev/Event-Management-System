@@ -16,7 +16,14 @@ public partial class User_BrowseEvents : System.Web.UI.Page
             return;
         }
 
-        litUsernameNav.Text = User.Identity.Name;
+        string fullName = Session["FullName"] as string;
+        if (string.IsNullOrEmpty(fullName))
+        {
+            Response.Redirect("../Login.aspx");
+            return;
+        }
+
+        litUsernameNav.Text = fullName;
 
         string role = Session["Role"] as string;
         if (role == "Admin")
@@ -68,6 +75,40 @@ public partial class User_BrowseEvents : System.Web.UI.Page
     {
         txtSearch.Text = "";
         LoadEvents();
+    }
+
+    protected void rptEvents_ItemCommand(object source, System.Web.UI.WebControls.RepeaterCommandEventArgs e)
+    {
+        if (e.CommandName == "Book")
+        {
+            int eventId = Convert.ToInt32(e.CommandArgument);
+            int userId = Convert.ToInt32(Session["UserID"]);
+
+            if (BookEvent(userId, eventId))
+            {
+                litMessage.Text = "Ticket Booked Successfully!";
+                pnlMessage.Visible = true;
+                LoadEvents(txtSearch.Text.Trim());
+            }
+        }
+    }
+
+    private bool BookEvent(int userId, int eventId)
+    {
+        using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+            string query = "INSERT INTO Bookings (UserID, EventID, BookingDate) VALUES (@UserID, @EventID, @BookingDate)";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                cmd.Parameters.AddWithValue("@EventID", eventId);
+                cmd.Parameters.AddWithValue("@BookingDate", DateTime.Now);
+
+                conn.Open();
+                int rows = cmd.ExecuteNonQuery();
+                return rows > 0;
+            }
+        }
     }
 
     protected void btnLogout_Click(object sender, EventArgs e)

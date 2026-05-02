@@ -79,6 +79,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="User/BrowseEvents.aspx"><i class="fa-solid fa-magnifying-glass me-1"></i> Browse Events</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="User/MyBookings.aspx"><i class="fa-solid fa-ticket me-1"></i> My Bookings</a>
+                            </li>
                         </asp:PlaceHolder>
                     </ul>
                     <div class="d-flex align-items-center">
@@ -115,19 +118,21 @@
                 <div class="col-md-4">
                     <div class="stat-card">
                         <div class="stat-icon bg-info-subtle text-info">
-                            <i class="fa-solid fa-users-gear"></i>
+                            <i class="fa-solid fa-ticket"></i>
                         </div>
                         <div class="stat-value"><asp:Literal ID="litTotalUsers" runat="server"></asp:Literal></div>
-                        <div class="stat-label">System Users</div>
+                        <div class="stat-label">
+                            <asp:Literal ID="litBookingsLabel" runat="server" Text="Total Bookings"></asp:Literal>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stat-card">
                         <div class="stat-icon bg-success-subtle text-success">
-                            <i class="fa-solid fa-chair"></i>
+                            <i class="fa-solid fa-circle-check"></i>
                         </div>
-                        <div class="stat-value"><asp:Literal ID="litTotalCapacity" runat="server"></asp:Literal></div>
-                        <div class="stat-label">Total Capacity</div>
+                        <div class="stat-value"><asp:Literal ID="litBookingScope" runat="server"></asp:Literal></div>
+                        <div class="stat-label">Booking Scope</div>
                     </div>
                 </div>
             </div>
@@ -164,12 +169,24 @@
                     <div class="col-md-5">
                         <div class="card card-menu p-4">
                             <div class="card-icon icon-user">
-                                <i class="fa-solid fa-ticket"></i>
+                                <i class="fa-solid fa-compass"></i>
                             </div>
                             <h4 class="fw-bold">Explore Events</h4>
                             <p class="text-muted mb-4">Discover upcoming conferences, workshops, and meetups. Search by name or location to find the events that interest you most.</p>
                             <a href="User/BrowseEvents.aspx" class="btn-action btn-user">
-                                <i class="fa-solid fa-compass me-2"></i> Browse & Book
+                                <i class="fa-solid fa-magnifying-glass me-2"></i> Browse & Book
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card card-menu p-4">
+                            <div class="card-icon icon-user" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                                <i class="fa-solid fa-ticket"></i>
+                            </div>
+                            <h4 class="fw-bold">My Bookings</h4>
+                            <p class="text-muted mb-4">View your registered events, check dates and locations, and manage your personal event calendar with ease.</p>
+                            <a href="User/MyBookings.aspx" class="btn-action btn-user" style="background: #ffc107;">
+                                <i class="fa-solid fa-list me-2"></i> View My Tickets
                             </a>
                         </div>
                     </div>

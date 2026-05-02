@@ -17,17 +17,19 @@ public partial class Dashboard : System.Web.UI.Page
         }
 
         string username = User.Identity.Name;
-        litUsername.Text = username;
-        litUsernameWelcome.Text = username;
-
-        string role = Session["Role"] as string;
+        string fullName = Session["FullName"] as string;
 
         // If session is lost but user is authenticated via FormsAuth
-        if (string.IsNullOrEmpty(role))
+        if (string.IsNullOrEmpty(fullName))
         {
-            role = GetUserRole(username);
-            Session["Role"] = role;
+            SetUserSession(username);
+            fullName = Session["FullName"] as string;
         }
+
+        litUsername.Text = fullName;
+        litUsernameWelcome.Text = fullName;
+
+        string role = Session["Role"] as string;
 
         if (role == "Admin")
         {
@@ -46,17 +48,24 @@ public partial class Dashboard : System.Web.UI.Page
         }
     }
 
-    private string GetUserRole(string username)
+    private void SetUserSession(string username)
     {
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            string query = "SELECT Role FROM Users WHERE Username = @Username";
+            string query = "SELECT UserID, FullName, Role FROM Users WHERE Username = @Username";
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@Username", username);
                 conn.Open();
-                object result = cmd.ExecuteScalar();
-                return result != null ? result.ToString() : "";
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        Session["UserID"] = Convert.ToInt32(reader["UserID"]);
+                        Session["FullName"] = reader["FullName"].ToString();
+                        Session["Role"] = reader["Role"].ToString();
+                    }
+                }
             }
         }
     }
@@ -73,16 +82,27 @@ public partial class Dashboard : System.Web.UI.Page
                 litTotalEvents.Text = cmd.ExecuteScalar().ToString();
             }
 
-            // Total Users
-            using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Users", conn))
+            // Role-based Bookings Statistics
+            string role = Session["Role"] as string;
+            if (role == "Admin")
             {
-                litTotalUsers.Text = cmd.ExecuteScalar().ToString();
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Bookings", conn))
+                {
+                    litTotalUsers.Text = cmd.ExecuteScalar().ToString();
+                }
+                litBookingsLabel.Text = "Total Bookings";
+                litBookingScope.Text = "System-wide";
             }
-
-            // Total Capacity
-            using (SqlCommand cmd = new SqlCommand("SELECT ISNULL(SUM(Capacity), 0) FROM Events", conn))
+            else
             {
-                litTotalCapacity.Text = cmd.ExecuteScalar().ToString();
+                int userId = Convert.ToInt32(Session["UserID"]);
+                using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Bookings WHERE UserID = @UserID", conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    litTotalUsers.Text = cmd.ExecuteScalar().ToString();
+                }
+                litBookingsLabel.Text = "My Bookings";
+                litBookingScope.Text = "Personal";
             }
         }
     }

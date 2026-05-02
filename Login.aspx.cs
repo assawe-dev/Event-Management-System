@@ -24,19 +24,26 @@ public partial class Login : System.Web.UI.Page
         string role = "";
         bool isValid = false;
 
+        int userId = 0;
+        string fullName = "";
+
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            string query = "SELECT Role FROM Users WHERE Username = @Username AND Password = @Password";
+            string query = "SELECT UserID, FullName, Role FROM Users WHERE Username = @Username AND Password = @Password";
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@Username", username);
                 cmd.Parameters.AddWithValue("@Password", password);
                 conn.Open();
-                object result = cmd.ExecuteScalar();
-                if (result != null)
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    isValid = true;
-                    role = result.ToString();
+                    if (reader.Read())
+                    {
+                        isValid = true;
+                        userId = Convert.ToInt32(reader["UserID"]);
+                        fullName = reader["FullName"].ToString();
+                        role = reader["Role"].ToString();
+                    }
                 }
             }
         }
@@ -61,6 +68,8 @@ public partial class Login : System.Web.UI.Page
             }
 
             Response.Cookies.Add(cookie);
+            Session["UserID"] = userId;
+            Session["FullName"] = fullName;
             Session["Role"] = role;
             Session["Username"] = username;
             Response.Redirect("Dashboard.aspx");
