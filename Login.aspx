@@ -135,10 +135,6 @@
 
                 <asp:Button ID="btnLogin" runat="server" Text="Sign In" CssClass="btn btn-login w-100 mt-2" OnClick="btnLogin_Click" />
 
-                <div class="mt-3 text-center">
-                    <asp:Label ID="lblMessage" runat="server" CssClass="text-danger small fw-semibold"></asp:Label>
-                </div>
-
                 <div class="demo-box">
                     <p class="text-muted small fw-bold mb-2"><i class="fa-solid fa-flask me-1"></i> Demo Access:</p>
                     <div class="d-flex justify-content-between">

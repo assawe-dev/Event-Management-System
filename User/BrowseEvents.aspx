@@ -88,12 +88,6 @@
         </section>
 
         <div class="container">
-            <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="fa-solid fa-circle-check me-2"></i>
-                <asp:Literal ID="litMessage" runat="server"></asp:Literal>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </asp:Panel>
-
             <div class="search-container mb-5">
                 <div class="row g-3">
                     <div class="col-md-9">

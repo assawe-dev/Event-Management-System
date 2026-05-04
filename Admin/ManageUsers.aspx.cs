@@ -85,14 +85,12 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
         ddlRole.SelectedIndex = 0;
         litFormTitle.Text = "Add New User";
         btnSave.Text = "Save";
-        pnlMessage.Visible = false;
     }
 
-    private void ShowMessage(string message, string cssClass)
+    private void ShowMessage(string message)
     {
-        lblMessage.Text = message;
-        pnlMessage.CssClass = "alert alert-dismissible fade show " + cssClass;
-        pnlMessage.Visible = true;
+        string script = "alert('" + message.Replace("'", "\\'") + "');";
+        ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
     }
 
     protected void btnSave_Click(object sender, EventArgs e)
@@ -135,11 +133,11 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
             string msg = string.IsNullOrEmpty(id) ? "User added successfully!" : "User updated!";
             ResetForm();
             LoadUsers();
-            ShowMessage(msg, "alert-success");
+            ShowMessage(msg);
         }
         catch (Exception ex)
         {
-            ShowMessage("Error: " + ex.Message, "alert-danger");
+            ShowMessage("Error: " + ex.Message);
         }
     }
 
@@ -165,7 +163,6 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
                             ddlRole.SelectedValue = dr["Role"].ToString();
                             litFormTitle.Text = "Edit User";
                             btnSave.Text = "Update";
-                            pnlMessage.Visible = false;
                         }
                     }
                 }
@@ -187,11 +184,11 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
                     }
                 }
                 LoadUsers();
-                ShowMessage("User deleted!", "alert-success");
+                ShowMessage("User deleted!");
             }
             catch (Exception ex)
             {
-                ShowMessage("Error deleting user: " + ex.Message, "alert-danger");
+                ShowMessage("Error deleting user: " + ex.Message);
             }
         }
     }

@@ -76,7 +76,8 @@ public partial class Login : System.Web.UI.Page
         }
         else
         {
-            lblMessage.Text = "Invalid username or password.";
+            string script = "alert('Invalid username or password.');";
+            ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
         }
     }
 }
