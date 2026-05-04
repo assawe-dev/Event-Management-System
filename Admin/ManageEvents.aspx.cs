@@ -87,14 +87,12 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         txtAvailableSeats.Text = "";
         litFormTitle.Text = "Add New Event";
         btnSave.Text = "Save";
-        pnlMessage.Visible = false;
     }
 
-    private void ShowMessage(string message, string cssClass)
+    private void ShowMessage(string message)
     {
-        lblMessage.Text = message;
-        pnlMessage.CssClass = "alert alert-dismissible fade show " + cssClass;
-        pnlMessage.Visible = true;
+        string script = "alert('" + message.Replace("'", "\\'") + "');";
+        ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
     }
 
     protected void btnSave_Click(object sender, EventArgs e)
@@ -141,11 +139,11 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
             string msg = string.IsNullOrEmpty(id) ? "Event added successfully!" : "Event updated!";
             ResetForm();
             LoadEvents();
-            ShowMessage(msg, "alert-success");
+            ShowMessage(msg);
         }
         catch (Exception ex)
         {
-            ShowMessage("Error: " + ex.Message, "alert-danger");
+            ShowMessage("Error: " + ex.Message);
         }
     }
 
@@ -173,7 +171,6 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                             txtAvailableSeats.Text = dr["AvailableSeats"].ToString();
                             litFormTitle.Text = "Edit Event";
                             btnSave.Text = "Update";
-                            pnlMessage.Visible = false;
                         }
                     }
                 }
@@ -195,11 +192,11 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
                     }
                 }
                 LoadEvents();
-                ShowMessage("Event deleted!", "alert-success");
+                ShowMessage("Event deleted!");
             }
             catch (Exception ex)
             {
-                ShowMessage("Error deleting event: " + ex.Message, "alert-danger");
+                ShowMessage("Error deleting event: " + ex.Message);
             }
         }
     }

@@ -86,8 +86,8 @@ public partial class User_BrowseEvents : System.Web.UI.Page
 
             if (BookEvent(userId, eventId))
             {
-                litMessage.Text = "Ticket Booked Successfully!";
-                pnlMessage.Visible = true;
+                string script = "alert('Ticket Booked Successfully!');";
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
                 LoadEvents(txtSearch.Text.Trim());
             }
         }

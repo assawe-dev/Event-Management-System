@@ -95,11 +95,6 @@
         </div>
 
         <div class="container pb-5">
-            <asp:Panel ID="pnlMessage" runat="server" Visible="false" CssClass="alert alert-dismissible fade show" role="alert">
-                <asp:Label ID="lblMessage" runat="server"></asp:Label>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </asp:Panel>
-
             <div class="card form-section mb-4">
                 <h5 class="fw-bold mb-4 text-primary">
                     <i class="fa-solid fa-pen-to-square me-2"></i>
