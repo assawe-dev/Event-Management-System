@@ -17,10 +17,10 @@
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); }
 
-        .navbar { background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; }
-        .navbar-brand { font-weight: 700; color: var(--primary); }
-        .nav-link { font-weight: 500; color: #6c757d; margin: 0 10px; }
-        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.1); padding: 15px 0; }
+        .navbar-brand { font-weight: 700; color: white !important; }
+        .nav-link { font-weight: 500; color: rgba(255,255,255,0.7) !important; margin: 0 10px; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
 
         .page-header { background: white; padding: 30px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 30px; }
         .card { border: none; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
@@ -44,7 +44,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="../Dashboard.aspx">
                     <i class="fa-solid fa-calendar-check me-2"></i>EMS
@@ -95,7 +95,7 @@
         </div>
 
         <div class="container pb-5">
-            <div class="card form-section mb-4">
+            <div class="card form-section mb-4 shadow-sm rounded-3 p-4">
                 <h5 class="fw-bold mb-4 text-primary">
                     <i class="fa-solid fa-user-plus me-2"></i>
                     <asp:Literal ID="litFormTitle" runat="server" Text="Add New User"></asp:Literal>
@@ -132,14 +132,18 @@
                         </asp:DropDownList>
                     </div>
                     <div class="col-md-2 d-flex align-items-end gap-2">
-                        <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="btn btn-primary w-100" OnClick="btnSave_Click" ValidationGroup="UserForm" />
-                        <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="btn btn-light w-100" OnClick="btnCancel_Click" CausesValidation="false" />
+                        <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary w-100" OnClick="btnSave_Click" ValidationGroup="UserForm">
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Save
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="btnCancel" runat="server" CssClass="btn btn-light w-100" OnClick="btnCancel_Click" CausesValidation="false">
+                            <i class="fa-solid fa-xmark me-1"></i> Cancel
+                        </asp:LinkButton>
                     </div>
                 </div>
             </div>
 
-            <div class="card table-responsive">
-                <asp:GridView ID="gvUsers" runat="server" AutoGenerateColumns="False" CssClass="table table-hover mb-0"
+            <div class="table-responsive shadow-sm rounded-3 overflow-hidden mb-5">
+                <asp:GridView ID="gvUsers" runat="server" AutoGenerateColumns="False" CssClass="table table-hover table-striped align-middle mb-0"
                     OnRowCommand="gvUsers_RowCommand" DataKeyNames="UserID" GridLines="None">
                     <Columns>
                         <asp:BoundField DataField="UserID" HeaderText="ID" ItemStyle-CssClass="text-muted small" />
@@ -164,12 +168,12 @@
                             <ItemTemplate>
                                 <asp:LinkButton ID="btnEdit" runat="server" CommandName="EditUser"
                                     CommandArgument='<%# Eval("UserID") %>' CssClass="btn btn-sm btn-outline-warning me-1">
-                                    <i class="fa-solid fa-pencil"></i>
+                                    <i class="fa-solid fa-pencil"></i> Edit
                                 </asp:LinkButton>
                                 <asp:LinkButton ID="btnDelete" runat="server" CommandName="DeleteUser"
                                     CommandArgument='<%# Eval("UserID") %>' CssClass="btn btn-sm btn-outline-danger"
                                     OnClientClick="return confirm('Are you sure you want to delete this user?');">
-                                    <i class="fa-solid fa-trash-can"></i>
+                                    <i class="fa-solid fa-trash-can"></i> Delete
                                 </asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>

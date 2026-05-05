@@ -16,13 +16,13 @@
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); }
 
-        .navbar { background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; }
-        .navbar-brand { font-weight: 700; color: var(--primary); }
-        .nav-link { font-weight: 500; color: #6c757d; margin: 0 10px; }
-        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.1); padding: 15px 0; }
+        .navbar-brand { font-weight: 700; color: white !important; }
+        .nav-link { font-weight: 500; color: rgba(255,255,255,0.7) !important; margin: 0 10px; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
 
         .header-section { background: white; padding: 40px 0; border-bottom: 1px solid #e9ecef; margin-bottom: 40px; }
-        .grid-container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .grid-container { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
         .table { margin-bottom: 0; }
         .table thead th { border-top: none; background: #f8f9fa; color: #6c757d; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; padding: 15px; }
@@ -34,7 +34,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="../Dashboard.aspx">
                     <i class="fa-solid fa-calendar-check me-2"></i>EMS
@@ -80,8 +80,8 @@
         </section>
 
         <div class="container mb-5">
-            <div class="grid-container">
-                <asp:GridView ID="gvBookings" runat="server" AutoGenerateColumns="false" CssClass="table" GridLines="None">
+            <div class="grid-container table-responsive shadow-sm rounded-3 overflow-hidden p-0">
+                <asp:GridView ID="gvBookings" runat="server" AutoGenerateColumns="false" CssClass="table table-hover table-striped align-middle mb-0" GridLines="None">
                     <Columns>
                         <asp:BoundField DataField="BookingID" HeaderText="ID" ItemStyle-Width="80px" />
                         <asp:TemplateField HeaderText="Event Name">

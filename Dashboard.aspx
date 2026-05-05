@@ -20,10 +20,10 @@
         body { font-family: 'Inter', sans-serif; background-color: #f4f7fe; }
 
         /* Navbar */
-        .navbar { background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; }
-        .navbar-brand { font-weight: 700; color: var(--primary); font-size: 1.5rem; }
-        .nav-link { font-weight: 500; color: #6c757d; margin: 0 10px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.1); padding: 15px 0; }
+        .navbar-brand { font-weight: 700; color: white !important; font-size: 1.5rem; }
+        .nav-link { font-weight: 500; color: rgba(255,255,255,0.7) !important; margin: 0 10px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
         .btn-logout { border-radius: 10px; padding: 8px 20px; font-weight: 600; }
 
         /* Dashboard Header */
@@ -54,7 +54,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="Dashboard.aspx">
                     <i class="fa-solid fa-calendar-check me-2"></i>EMS
@@ -105,9 +105,9 @@
             </div>
 
             <!-- Statistics Section -->
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-5 pb-4">
                 <div class="col-md-4">
-                    <div class="stat-card">
+                    <div class="stat-card shadow-sm rounded-3">
                         <div class="stat-icon bg-primary-subtle text-primary">
                             <i class="fa-solid fa-calendar-star"></i>
                         </div>
@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="stat-card">
+                    <div class="stat-card shadow-sm rounded-3">
                         <div class="stat-icon bg-info-subtle text-info">
                             <i class="fa-solid fa-ticket"></i>
                         </div>
@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="stat-card">
+                    <div class="stat-card shadow-sm rounded-3">
                         <div class="stat-icon bg-success-subtle text-success">
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
@@ -137,10 +137,10 @@
                 </div>
             </div>
 
-            <div class="row g-4 justify-content-center">
+            <div class="row g-4 justify-content-center pb-5">
                 <asp:PlaceHolder ID="phAdminCard" runat="server" Visible="false">
                     <div class="col-md-4">
-                        <div class="card card-menu p-4">
+                        <div class="card card-menu p-4 shadow-sm rounded-3">
                             <div class="card-icon icon-admin">
                                 <i class="fa-solid fa-screwdriver-wrench"></i>
                             </div>
@@ -152,7 +152,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="card card-menu p-4">
+                        <div class="card card-menu p-4 shadow-sm rounded-3">
                             <div class="card-icon icon-admin" style="background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
                                 <i class="fa-solid fa-user-shield"></i>
                             </div>
@@ -167,7 +167,7 @@
 
                 <asp:PlaceHolder ID="phUserCard" runat="server" Visible="false">
                     <div class="col-md-5">
-                        <div class="card card-menu p-4">
+                        <div class="card card-menu p-4 shadow-sm rounded-3">
                             <div class="card-icon icon-user">
                                 <i class="fa-solid fa-compass"></i>
                             </div>
@@ -179,7 +179,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="card card-menu p-4">
+                        <div class="card card-menu p-4 shadow-sm rounded-3">
                             <div class="card-icon icon-user" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
                                 <i class="fa-solid fa-ticket"></i>
                             </div>
