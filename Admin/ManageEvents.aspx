@@ -96,10 +96,15 @@
 
         <div class="container pb-5">
             <div class="card form-section mb-4">
-                <h5 class="fw-bold mb-4 text-primary">
-                    <i class="fa-solid fa-pen-to-square me-2"></i>
-                    <asp:Literal ID="litFormTitle" runat="server" Text="Add New Event"></asp:Literal>
-                </h5>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold text-primary mb-0">
+                        <i class="fa-solid fa-pen-to-square me-2"></i>
+                        <asp:Literal ID="litFormTitle" runat="server" Text="Add New Event"></asp:Literal>
+                    </h5>
+                    <asp:LinkButton ID="btnRefresh" runat="server" CssClass="btn btn-outline-secondary btn-sm" OnClick="btnRefresh_Click" CausesValidation="false">
+                        <i class="fa-solid fa-rotate me-1"></i> Refresh List
+                    </asp:LinkButton>
+                </div>
                 <asp:HiddenField ID="hfEventId" runat="server" />
                 <div class="row g-3">
                     <div class="col-md-3">

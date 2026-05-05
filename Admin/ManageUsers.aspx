@@ -102,13 +102,13 @@
                 </h5>
                 <asp:HiddenField ID="hfUserId" runat="server" />
                 <div class="row g-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold small">Username</label>
                         <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="e.g. john_doe"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername"
                             ErrorMessage="Username is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm"></asp:RequiredFieldValidator>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold small">Password</label>
                         <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="SingleLine" placeholder="Enter password"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword"
@@ -117,7 +117,13 @@
                             ErrorMessage="Min. 6 characters" ValidationExpression="^.{6,}$"
                             CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm"></asp:RegularExpressionValidator>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Full Name</label>
+                        <asp:TextBox ID="txtFullName" runat="server" CssClass="form-control" placeholder="e.g. John Doe"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvFullName" runat="server" ControlToValidate="txtFullName"
+                            ErrorMessage="Full Name is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm"></asp:RequiredFieldValidator>
+                    </div>
+                    <div class="col-md-1">
                         <label class="form-label fw-semibold small">Role</label>
                         <asp:DropDownList ID="ddlRole" runat="server" CssClass="form-select">
                             <asp:ListItem Text="User" Value="User"></asp:ListItem>
@@ -140,6 +146,11 @@
                         <asp:TemplateField HeaderText="Username">
                             <ItemTemplate>
                                 <span class="fw-bold text-dark"><%# Eval("Username") %></span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Full Name">
+                            <ItemTemplate>
+                                <span><%# Eval("FullName") %></span>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Role">

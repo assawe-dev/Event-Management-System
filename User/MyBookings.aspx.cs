@@ -25,6 +25,12 @@ public partial class User_MyBookings : System.Web.UI.Page
 
         litUsernameNav.Text = fullName;
 
+        string role = Session["Role"] as string;
+        if (role == "Admin")
+        {
+            phAdminMenu.Visible = true;
+        }
+
         if (!IsPostBack)
         {
             LoadBookings();
