@@ -72,7 +72,9 @@ public partial class Login : System.Web.UI.Page
             Session["FullName"] = fullName;
             Session["Role"] = role;
             Session["Username"] = username;
-            Response.Redirect("Dashboard.aspx");
+
+            string welcomeScript = "alert('Welcome, " + fullName.Replace("'", "\\'") + "!'); window.location='Dashboard.aspx';";
+            ClientScript.RegisterStartupScript(this.GetType(), "welcome", welcomeScript, true);
         }
         else
         {

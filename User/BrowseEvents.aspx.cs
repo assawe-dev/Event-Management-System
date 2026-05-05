@@ -84,11 +84,19 @@ public partial class User_BrowseEvents : System.Web.UI.Page
             int eventId = Convert.ToInt32(e.CommandArgument);
             int userId = Convert.ToInt32(Session["UserID"]);
 
-            if (BookEvent(userId, eventId))
+            try
             {
-                string script = "alert('Ticket Booked Successfully!');";
+                if (BookEvent(userId, eventId))
+                {
+                    string script = "alert('Ticket Booked Successfully!');";
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
+                    LoadEvents(txtSearch.Text.Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                string script = "alert('" + ex.Message.Replace("'", "\\'") + "');";
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
-                LoadEvents(txtSearch.Text.Trim());
             }
         }
     }
@@ -97,16 +105,55 @@ public partial class User_BrowseEvents : System.Web.UI.Page
     {
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            string query = "INSERT INTO Bookings (UserID, EventID, BookingDate) VALUES (@UserID, @EventID, @BookingDate)";
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            conn.Open();
+            using (SqlTransaction trans = conn.BeginTransaction())
             {
-                cmd.Parameters.AddWithValue("@UserID", userId);
-                cmd.Parameters.AddWithValue("@EventID", eventId);
-                cmd.Parameters.AddWithValue("@BookingDate", DateTime.Now);
+                try
+                {
+                    // Check availability first
+                    string checkQuery = "SELECT AvailableSeats FROM Events WHERE EventID = @EventID";
+                    int availableSeats = 0;
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn, trans))
+                    {
+                        checkCmd.Parameters.AddWithValue("@EventID", eventId);
+                        object result = checkCmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            availableSeats = Convert.ToInt32(result);
+                        }
+                    }
 
-                conn.Open();
-                int rows = cmd.ExecuteNonQuery();
-                return rows > 0;
+                    if (availableSeats <= 0)
+                    {
+                        throw new Exception("Sorry, this event is already sold out!");
+                    }
+
+                    // Insert Booking
+                    string insertQuery = "INSERT INTO Bookings (UserID, EventID, BookingDate) VALUES (@UserID, @EventID, @BookingDate)";
+                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn, trans))
+                    {
+                        insertCmd.Parameters.AddWithValue("@UserID", userId);
+                        insertCmd.Parameters.AddWithValue("@EventID", eventId);
+                        insertCmd.Parameters.AddWithValue("@BookingDate", DateTime.Now);
+                        insertCmd.ExecuteNonQuery();
+                    }
+
+                    // Decrement AvailableSeats
+                    string updateQuery = "UPDATE Events SET AvailableSeats = AvailableSeats - 1 WHERE EventID = @EventID";
+                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn, trans))
+                    {
+                        updateCmd.Parameters.AddWithValue("@EventID", eventId);
+                        updateCmd.ExecuteNonQuery();
+                    }
+
+                    trans.Commit();
+                    return true;
+                }
+                catch
+                {
+                    trans.Rollback();
+                    throw;
+                }
             }
         }
     }

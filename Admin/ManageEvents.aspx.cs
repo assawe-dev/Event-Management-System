@@ -77,6 +77,11 @@ public partial class Admin_ManageEvents : System.Web.UI.Page
         ResetForm();
     }
 
+    protected void btnRefresh_Click(object sender, EventArgs e)
+    {
+        LoadEvents();
+    }
+
     private void ResetForm()
     {
         hfEventId.Value = "";

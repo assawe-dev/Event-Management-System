@@ -29,7 +29,7 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
     {
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            string query = "SELECT UserID, Username, Role FROM Users";
+            string query = "SELECT UserID, Username, FullName, Role FROM Users";
             if (!string.IsNullOrEmpty(search))
             {
                 query += " WHERE Username LIKE @search";
@@ -82,6 +82,7 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
         hfUserId.Value = "";
         txtUsername.Text = "";
         txtPassword.Text = "";
+        txtFullName.Text = "";
         ddlRole.SelectedIndex = 0;
         litFormTitle.Text = "Add New User";
         btnSave.Text = "Save";
@@ -99,6 +100,7 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
 
         string username = txtUsername.Text.Trim();
         string password = txtPassword.Text.Trim();
+        string fullName = txtFullName.Text.Trim();
         string role = ddlRole.SelectedValue;
         string id = hfUserId.Value;
 
@@ -110,17 +112,18 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
                 string query;
                 if (string.IsNullOrEmpty(id))
                 {
-                    query = "INSERT INTO Users (Username, Password, Role) VALUES (@username, @password, @role)";
+                    query = "INSERT INTO Users (Username, Password, FullName, Role) VALUES (@username, @password, @fullname, @role)";
                 }
                 else
                 {
-                    query = "UPDATE Users SET Username=@username, Password=@password, Role=@role WHERE UserID=@id";
+                    query = "UPDATE Users SET Username=@username, Password=@password, FullName=@fullname, Role=@role WHERE UserID=@id";
                 }
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@username", username);
                     cmd.Parameters.AddWithValue("@password", password);
+                    cmd.Parameters.AddWithValue("@fullname", fullName);
                     cmd.Parameters.AddWithValue("@role", role);
                     if (!string.IsNullOrEmpty(id))
                     {
@@ -160,6 +163,7 @@ public partial class Admin_ManageUsers : System.Web.UI.Page
                             hfUserId.Value = dr["UserID"].ToString();
                             txtUsername.Text = dr["Username"].ToString();
                             txtPassword.Text = dr["Password"].ToString();
+                            txtFullName.Text = dr["FullName"].ToString();
                             ddlRole.SelectedValue = dr["Role"].ToString();
                             litFormTitle.Text = "Edit User";
                             btnSave.Text = "Update";
