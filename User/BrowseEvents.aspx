@@ -16,16 +16,16 @@
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg); }
 
-        .navbar { background: white; box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; }
-        .navbar-brand { font-weight: 700; color: var(--primary); }
-        .nav-link { font-weight: 500; color: #6c757d; margin: 0 10px; }
-        .nav-link:hover, .nav-link.active { color: var(--primary); }
+        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.1); padding: 15px 0; }
+        .navbar-brand { font-weight: 700; color: white !important; }
+        .nav-link { font-weight: 500; color: rgba(255,255,255,0.7) !important; margin: 0 10px; }
+        .nav-link:hover, .nav-link.active { color: white !important; }
 
-        .hero-section { background: linear-gradient(rgba(67, 97, 238, 0.8), rgba(67, 97, 238, 0.8)), url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3'); background-size: cover; background-position: center; padding: 100px 0; color: white; margin-bottom: 50px; }
-        .search-container { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-top: -50px; position: relative; z-index: 10; }
+        .hero-section { background: linear-gradient(rgba(67, 97, 238, 0.85), rgba(67, 97, 238, 0.85)), url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3'); background-size: cover; background-position: center; padding: 120px 0; color: white; margin-bottom: 50px; }
+        .search-container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.12); margin-top: -60px; position: relative; z-index: 10; }
 
-        .event-card { border: none; border-radius: 20px; overflow: hidden; transition: 0.3s; height: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: white; }
-        .event-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .event-card { border: none; border-radius: 20px; overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); height: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: white; }
+        .event-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
         .event-img { height: 200px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #dee2e6; font-size: 4rem; position: relative; }
         .price-tag { position: absolute; top: 15px; right: 15px; background: white; padding: 5px 15px; border-radius: 50px; font-weight: 700; color: var(--primary); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
 
@@ -42,7 +42,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="../Dashboard.aspx">
                     <i class="fa-solid fa-calendar-check me-2"></i>EMS
@@ -80,15 +80,15 @@
             </div>
         </nav>
 
-        <section class="hero-section text-center">
-            <div class="container">
+        <section class="hero-section text-center py-5">
+            <div class="container py-4">
                 <h1 class="display-4 fw-bold mb-3">Discover Amazing Events</h1>
                 <p class="lead opacity-75">Find and book the best events happening around you.</p>
             </div>
         </section>
 
         <div class="container">
-            <div class="search-container mb-5">
+            <div class="search-container shadow-lg mb-5">
                 <div class="row g-3">
                     <div class="col-md-9">
                         <div class="input-group">
@@ -113,7 +113,7 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                     <div class="col-md-4 mb-4">
-                        <div class="event-card">
+                        <div class="event-card shadow-sm rounded-4">
                             <div class="event-img">
                                 <i class="fa-solid fa-image"></i>
                                 <div class="price-tag">

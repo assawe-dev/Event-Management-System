@@ -31,9 +31,6 @@
             width: 100%;
             max-width: 450px;
             border: none;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            overflow: hidden;
             background: #fff;
         }
         .card-header-gradient {
@@ -45,9 +42,6 @@
         .card-header-gradient i {
             font-size: 3rem;
             margin-bottom: 15px;
-        }
-        .card-body {
-            padding: 40px;
         }
         .form-control {
             border-radius: 10px;
@@ -101,13 +95,13 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div class="login-card animate__animated animate__fadeInUp">
+        <div class="login-card shadow-lg rounded-4 overflow-hidden animate__animated animate__fadeInUp">
             <div class="card-header-gradient">
                 <i class="fa-solid fa-calendar-check"></i>
                 <h2 class="fw-bold mb-0">EMS Portal</h2>
                 <p class="opacity-75">Sign in to manage your events</p>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4 p-md-5">
                 <div class="mb-4">
                     <label class="form-label fw-semibold text-secondary small text-uppercase">Username</label>
                     <div class="input-group">
