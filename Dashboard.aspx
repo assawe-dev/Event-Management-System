@@ -74,6 +74,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="Admin/ManageUsers.aspx"><i class="fa-solid fa-users me-1"></i> Manage Users</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="Admin/ViewBookings.aspx"><i class="fa-solid fa-ticket me-1"></i> View All Bookings</a>
+                            </li>
                         </asp:PlaceHolder>
                         <asp:PlaceHolder ID="phUserMenu" runat="server" Visible="false">
                             <li class="nav-item">
