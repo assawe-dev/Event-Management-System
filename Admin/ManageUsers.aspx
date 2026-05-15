@@ -60,6 +60,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="ManageUsers.aspx"><i class="fa-solid fa-users me-1"></i> Manage Users</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="ViewBookings.aspx"><i class="fa-solid fa-ticket me-1"></i> View All Bookings</a>
+                        </li>
                     </ul>
                     <div class="d-flex align-items-center">
                         <span class="me-3 text-secondary small fw-bold">
