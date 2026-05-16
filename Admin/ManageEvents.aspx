@@ -9,6 +9,47 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript">
+        function validateEvent() {
+            var eventName = document.getElementById('<%= txtEventName.ClientID %>').value.trim();
+            var eventDate = document.getElementById('<%= txtEventDate.ClientID %>').value.trim();
+            var location = document.getElementById('<%= txtLocation.ClientID %>').value.trim();
+            var capacity = document.getElementById('<%= txtCapacity.ClientID %>').value.trim();
+            var available = document.getElementById('<%= txtAvailableSeats.ClientID %>').value.trim();
+
+            if (eventName === "") {
+                alert("Event Name is required!");
+                return false;
+            }
+
+            if (eventDate === "") {
+                alert("Event Date is required!");
+                return false;
+            }
+
+            if (location === "") {
+                alert("Location is required!");
+                return false;
+            }
+
+            if (capacity === "" || isNaN(capacity) || parseInt(capacity) <= 0) {
+                alert("Capacity must be a positive number!");
+                return false;
+            }
+
+            if (available === "" || isNaN(available) || parseInt(available) < 0) {
+                alert("Available Seats must be a non-negative number!");
+                return false;
+            }
+
+            if (parseInt(available) > parseInt(capacity)) {
+                alert("Available Seats cannot exceed Capacity!");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
     <style>
         :root {
             --primary: #4361ee;
@@ -114,43 +155,43 @@
                         <label class="form-label fw-semibold small">Event Name</label>
                         <asp:TextBox ID="txtEventName" runat="server" CssClass="form-control" placeholder="e.g. Tech Summit 2025"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvEventName" runat="server" ControlToValidate="txtEventName"
-                            ErrorMessage="Name is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Name is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:RequiredFieldValidator>
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold small">Date</label>
                         <asp:TextBox ID="txtEventDate" runat="server" CssClass="form-control" TextMode="Date"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvEventDate" runat="server" ControlToValidate="txtEventDate"
-                            ErrorMessage="Date is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Date is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:RequiredFieldValidator>
                         <asp:CompareValidator ID="cvEventDate" runat="server" ControlToValidate="txtEventDate"
                             Operator="DataTypeCheck" Type="Date" ErrorMessage="Invalid date"
-                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:CompareValidator>
+                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:CompareValidator>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label fw-semibold small">Location</label>
                         <asp:TextBox ID="txtLocation" runat="server" CssClass="form-control" placeholder="e.g. San Francisco, CA"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvLocation" runat="server" ControlToValidate="txtLocation"
-                            ErrorMessage="Location is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Location is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:RequiredFieldValidator>
                     </div>
                     <div class="col-md-1">
                         <label class="form-label fw-semibold small">Capacity</label>
                         <asp:TextBox ID="txtCapacity" runat="server" CssClass="form-control" placeholder="0"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvCapacity" runat="server" ControlToValidate="txtCapacity"
-                            ErrorMessage="Required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:RequiredFieldValidator>
                         <asp:RangeValidator ID="rvCapacity" runat="server" ControlToValidate="txtCapacity"
                             MinimumValue="0" MaximumValue="1000000" Type="Integer" ErrorMessage="Invalid"
-                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RangeValidator>
+                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:RangeValidator>
                     </div>
                     <div class="col-md-1">
                         <label class="form-label fw-semibold small">Available</label>
                         <asp:TextBox ID="txtAvailableSeats" runat="server" CssClass="form-control" placeholder="0"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvAvailable" runat="server" ControlToValidate="txtAvailableSeats"
-                            ErrorMessage="Required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:RequiredFieldValidator>
                         <asp:CompareValidator ID="cvAvailable" runat="server" ControlToValidate="txtAvailableSeats"
                             ControlToCompare="txtCapacity" Operator="LessThanEqual" Type="Integer"
-                            ErrorMessage="Must be <= Capacity" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm"></asp:CompareValidator>
+                            ErrorMessage="Must be <= Capacity" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="EventForm" Enabled="false"></asp:CompareValidator>
                     </div>
                     <div class="col-md-2 d-flex align-items-end gap-2">
-                        <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary w-100" OnClick="btnSave_Click" ValidationGroup="EventForm">
+                        <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary w-100" OnClick="btnSave_Click" ValidationGroup="EventForm" OnClientClick="return validateEvent();">
                              <i class="fa-solid fa-floppy-disk me-1"></i> Save
                         </asp:LinkButton>
                         <asp:LinkButton ID="btnCancel" runat="server" CssClass="btn btn-light w-100" OnClick="btnCancel_Click" CausesValidation="false">

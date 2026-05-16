@@ -9,6 +9,39 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript">
+        function validateUser() {
+            var username = document.getElementById('<%= txtUsername.ClientID %>').value.trim();
+            var password = document.getElementById('<%= txtPassword.ClientID %>').value.trim();
+            var fullName = document.getElementById('<%= txtFullName.ClientID %>').value.trim();
+
+            if (username === "") {
+                alert("Username is required!");
+                return false;
+            }
+
+            if (password === "") {
+                alert("Password is required!");
+                return false;
+            }
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long!");
+                return false;
+            }
+
+            if (fullName === "") {
+                alert("Full Name is required!");
+                return false;
+            }
+            var nameRegex = /^[a-zA-Z\s]+$/;
+            if (!nameRegex.test(fullName)) {
+                alert("Full Name must contain letters only!");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
     <style>
         :root {
             --primary: #4361ee;
@@ -109,22 +142,22 @@
                         <label class="form-label fw-semibold small">Username</label>
                         <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="e.g. john_doe"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername"
-                            ErrorMessage="Username is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Username is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm" Enabled="false"></asp:RequiredFieldValidator>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label fw-semibold small">Password</label>
                         <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="SingleLine" placeholder="Enter password"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword"
-                            ErrorMessage="Password is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Password is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm" Enabled="false"></asp:RequiredFieldValidator>
                         <asp:RegularExpressionValidator ID="revPassword" runat="server" ControlToValidate="txtPassword"
                             ErrorMessage="Min. 6 characters" ValidationExpression="^.{6,}$"
-                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm"></asp:RegularExpressionValidator>
+                            CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm" Enabled="false"></asp:RegularExpressionValidator>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label fw-semibold small">Full Name</label>
                         <asp:TextBox ID="txtFullName" runat="server" CssClass="form-control" placeholder="e.g. John Doe"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvFullName" runat="server" ControlToValidate="txtFullName"
-                            ErrorMessage="Full Name is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm"></asp:RequiredFieldValidator>
+                            ErrorMessage="Full Name is required" CssClass="text-danger validation-error" Display="Dynamic" ValidationGroup="UserForm" Enabled="false"></asp:RequiredFieldValidator>
                     </div>
                     <div class="col-md-1">
                         <label class="form-label fw-semibold small">Role</label>
@@ -135,7 +168,7 @@
                         </asp:DropDownList>
                     </div>
                     <div class="col-md-2 d-flex align-items-end gap-2">
-                        <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary w-100" OnClick="btnSave_Click" ValidationGroup="UserForm">
+                        <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary w-100" OnClick="btnSave_Click" ValidationGroup="UserForm" OnClientClick="return validateUser();">
                             <i class="fa-solid fa-floppy-disk me-1"></i> Save
                         </asp:LinkButton>
                         <asp:LinkButton ID="btnCancel" runat="server" CssClass="btn btn-light w-100" OnClick="btnCancel_Click" CausesValidation="false">

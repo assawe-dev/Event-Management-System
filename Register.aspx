@@ -12,6 +12,39 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript">
+        function validateRegister() {
+            var fullName = document.getElementById('<%= txtFullName.ClientID %>').value.trim();
+            var username = document.getElementById('<%= txtUsername.ClientID %>').value.trim();
+            var password = document.getElementById('<%= txtPassword.ClientID %>').value.trim();
+
+            if (fullName === "") {
+                alert("Full Name is required!");
+                return false;
+            }
+            var nameRegex = /^[a-zA-Z\s]+$/;
+            if (!nameRegex.test(fullName)) {
+                alert("Full Name must contain letters only!");
+                return false;
+            }
+
+            if (username === "") {
+                alert("Username is required!");
+                return false;
+            }
+
+            if (password === "") {
+                alert("Password is required!");
+                return false;
+            }
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long!");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
     <style>
         :root {
             --primary-color: #4361ee;
@@ -114,7 +147,7 @@
                     </div>
                     <asp:RequiredFieldValidator ID="rfvFullName" runat="server" ControlToValidate="txtFullName"
                         ErrorMessage="<i class='fa-solid fa-circle-exclamation'></i> Full Name is required"
-                        CssClass="text-danger validation-error" Display="Dynamic"></asp:RequiredFieldValidator>
+                        CssClass="text-danger validation-error" Display="Dynamic" Enabled="false"></asp:RequiredFieldValidator>
                 </div>
 
                 <div class="mb-4">
@@ -125,7 +158,7 @@
                     </div>
                     <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ControlToValidate="txtUsername"
                         ErrorMessage="<i class='fa-solid fa-circle-exclamation'></i> Username is required"
-                        CssClass="text-danger validation-error" Display="Dynamic"></asp:RequiredFieldValidator>
+                        CssClass="text-danger validation-error" Display="Dynamic" Enabled="false"></asp:RequiredFieldValidator>
                 </div>
 
                 <div class="mb-4">
@@ -136,13 +169,13 @@
                     </div>
                     <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword"
                         ErrorMessage="<i class='fa-solid fa-circle-exclamation'></i> Password is required"
-                        CssClass="text-danger validation-error" Display="Dynamic"></asp:RequiredFieldValidator>
+                        CssClass="text-danger validation-error" Display="Dynamic" Enabled="false"></asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ID="revPassword" runat="server" ControlToValidate="txtPassword"
                         ErrorMessage="<i class='fa-solid fa-circle-exclamation'></i> Min. 6 characters"
-                        ValidationExpression="^.{6,}$" CssClass="text-danger validation-error" Display="Dynamic"></asp:RegularExpressionValidator>
+                        ValidationExpression="^.{6,}$" CssClass="text-danger validation-error" Display="Dynamic" Enabled="false"></asp:RegularExpressionValidator>
                 </div>
 
-                <asp:Button ID="btnRegister" runat="server" Text="Create Account" CssClass="btn btn-login w-100 mt-2" OnClick="btnRegister_Click" />
+                <asp:Button ID="btnRegister" runat="server" Text="Create Account" CssClass="btn btn-login w-100 mt-2" OnClick="btnRegister_Click" OnClientClick="return validateRegister();" />
 
                 <div class="text-center mt-4">
                     <p class="text-muted small mb-0">Already have an account? <a href="Login.aspx" class="link-text">Login here</a></p>
