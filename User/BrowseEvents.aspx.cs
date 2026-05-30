@@ -39,17 +39,19 @@ public partial class User_BrowseEvents : System.Web.UI.Page
 
     private void LoadEvents(string search = "")
     {
+        int userId = Convert.ToInt32(Session["UserID"]);
         using (SqlConnection conn = new SqlConnection(connectionString))
         {
-            string query = "SELECT * FROM Events";
+            string query = "SELECT * FROM Events WHERE EventID NOT IN (SELECT EventID FROM Bookings WHERE UserID = @UserID) AND AvailableSeats > 0";
             if (!string.IsNullOrEmpty(search))
             {
-                query += " WHERE EventName LIKE @search OR Location LIKE @search";
+                query = "SELECT * FROM Events WHERE (EventName LIKE @search OR Location LIKE @search) AND EventID NOT IN (SELECT EventID FROM Bookings WHERE UserID = @UserID) AND AvailableSeats > 0";
             }
             query += " ORDER BY EventDate ASC";
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
+                cmd.Parameters.AddWithValue("@UserID", userId);
                 if (!string.IsNullOrEmpty(search))
                 {
                     cmd.Parameters.AddWithValue("@search", "%" + search + "%");

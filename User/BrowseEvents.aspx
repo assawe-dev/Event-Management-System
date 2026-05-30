@@ -8,133 +8,151 @@
     <title>Browse Events | EMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4361ee;
-            --bg: #f8f9fa;
+            --bg-dark: #0f1115;
+            --card-dark: #1c1f26;
+            --accent: #6366f1;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); }
 
-        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.1); padding: 15px 0; }
-        .navbar-brand { font-weight: 700; color: white !important; }
-        .nav-link { font-weight: 500; color: rgba(255,255,255,0.7) !important; margin: 0 10px; }
-        .nav-link:hover, .nav-link.active { color: white !important; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); }
 
-        .hero-section { background: linear-gradient(rgba(67, 97, 238, 0.85), rgba(67, 97, 238, 0.85)), url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3'); background-size: cover; background-position: center; padding: 120px 0; color: white; margin-bottom: 50px; }
-        .search-container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.12); margin-top: -60px; position: relative; z-index: 10; }
+        .navbar {
+            background-color: rgba(15, 17, 21, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1f2937;
+            padding: 1rem 0;
+        }
 
-        .event-card { border: none; border-radius: 20px; overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); height: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: white; }
-        .event-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-        .event-img { height: 200px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #dee2e6; font-size: 4rem; position: relative; }
-        .price-tag { position: absolute; top: 15px; right: 15px; background: white; padding: 5px 15px; border-radius: 50px; font-weight: 700; color: var(--primary); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 800; color: white !important; }
+        .nav-link { color: var(--text-muted) !important; font-weight: 500; transition: all 0.2s; margin: 0 0.5rem; }
+        .nav-link:hover, .nav-link.active { color: var(--accent) !important; }
 
-        .event-body { padding: 25px; }
-        .event-date { color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .event-title { font-weight: 700; font-size: 1.25rem; margin-bottom: 15px; color: #212529; height: 3rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .event-info { color: #6c757d; font-size: 0.95rem; margin-bottom: 5px; }
+        .hero-section {
+            background: linear-gradient(rgba(15, 17, 21, 0.8), rgba(15, 17, 21, 0.8)), url('https://images.unsplash.com/photo-1540575861501-7ad05823c9f5?auto=format&fit=crop&q=80&w=1470');
+            background-size: cover; background-position: center; padding: 6rem 0; margin-bottom: 2rem;
+        }
 
-        .btn-view { border-radius: 10px; font-weight: 600; padding: 10px; width: 100%; border: 2px solid #f1f3f5; color: #495057; transition: 0.3s; }
-        .btn-view:hover { background: var(--primary); border-color: var(--primary); color: white; }
+        .search-container {
+            background-color: var(--card-dark);
+            border: 1px solid #374151;
+            padding: 1.5rem; border-radius: 1.25rem;
+            margin-top: -4rem; position: relative; z-index: 10;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
 
-        .empty-state { padding: 100px 0; text-align: center; color: #adb5bd; }
+        .form-control {
+            background-color: #0f1115; border: 1px solid #374151; color: white;
+            border-radius: 0.75rem; padding: 0.75rem 1rem;
+        }
+        .form-control:focus { background-color: #0f1115; color: white; border-color: var(--accent); box-shadow: none; }
+
+        .event-card {
+            background-color: var(--card-dark); border: 1px solid #374151;
+            border-radius: 1.25rem; overflow: hidden; height: 100%;
+            transition: all 0.3s;
+        }
+        .event-card:hover { transform: translateY(-8px); border-color: var(--accent); }
+
+        .event-img {
+            height: 180px; background-color: #2d3139;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; color: #374151; position: relative;
+        }
+
+        .seats-badge {
+            position: absolute; top: 1rem; right: 1rem;
+            background-color: rgba(99, 102, 241, 0.9);
+            color: white; padding: 0.25rem 0.75rem;
+            border-radius: 9999px; font-size: 0.75rem; font-weight: 700;
+        }
+
+        .event-body { padding: 1.5rem; }
+        .event-date { color: var(--accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+        .event-title { font-weight: 700; font-size: 1.1rem; color: white; margin-bottom: 1rem; line-height: 1.4; }
+        .event-meta { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 0.25rem; }
+
+        .btn-book {
+            background-color: var(--accent); color: white; width: 100%;
+            border-radius: 0.75rem; padding: 0.6rem; font-weight: 600;
+            border: none; margin-top: 1rem; transition: 0.2s;
+        }
+        .btn-book:hover { background-color: #4f46e5; transform: scale(1.02); color: white; }
+
+        .btn-logout {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 0.75rem; padding: 0.5rem 1rem;
+        }
     </style>
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
             <div class="container">
-                <a class="navbar-brand" href="../Dashboard.aspx">
-                    <i class="fa-solid fa-calendar-check me-2"></i>EMS
-                </a>
+                <a class="navbar-brand" href="../Dashboard.aspx">EMS.PRO</a>
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="../Dashboard.aspx"><i class="fa-solid fa-house me-1"></i> Dashboard</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="../Dashboard.aspx">Dashboard</a></li>
                         <asp:PlaceHolder ID="phAdminMenu" runat="server" Visible="false">
-                            <li class="nav-item">
-                                <a class="nav-link" href="../Admin/ManageEvents.aspx"><i class="fa-solid fa-list-check me-1"></i> Manage Events</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="../Admin/ManageUsers.aspx"><i class="fa-solid fa-users me-1"></i> Manage Users</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="../Admin/ManageEvents.aspx">Events</a></li>
                         </asp:PlaceHolder>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="BrowseEvents.aspx"><i class="fa-solid fa-magnifying-glass me-1"></i> Browse Events</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="MyBookings.aspx"><i class="fa-solid fa-ticket me-1"></i> My Bookings</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link active" href="BrowseEvents.aspx">Browse</a></li>
+                        <li class="nav-item"><a class="nav-link" href="MyBookings.aspx">My Tickets</a></li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <span class="me-3 text-secondary small fw-bold">
-                            <i class="fa-solid fa-circle-user me-1 text-primary"></i>
-                            <asp:Literal ID="litUsernameNav" runat="server"></asp:Literal>
-                        </span>
-                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-outline-danger btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
-                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        <span class="me-3 text-muted small fw-bold"><asp:Literal ID="litUsernameNav" runat="server"></asp:Literal></span>
+                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn-logout btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
+                            <i class="fa-solid fa-power-off"></i>
                         </asp:LinkButton>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <section class="hero-section text-center py-5">
-            <div class="container py-4">
-                <h1 class="display-4 fw-bold mb-3">Discover Amazing Events</h1>
-                <p class="lead opacity-75">Find and book the best events happening around you.</p>
+        <section class="hero-section text-center">
+            <div class="container">
+                <h1 class="display-4 fw-bold text-white mb-2">Discovery Portal</h1>
+                <p class="lead text-muted">Register for elite industry conferences and networking events.</p>
             </div>
         </section>
 
         <div class="container">
-            <div class="search-container shadow-lg mb-5">
-                <div class="row g-3">
+            <div class="search-container">
+                <div class="row g-2">
                     <div class="col-md-9">
-                        <div class="input-group">
-                            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control border-start-0 ps-0" placeholder="Search by name, category or location..."></asp:TextBox>
-                        </div>
+                        <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" placeholder="Search by name, venue, or city..."></asp:TextBox>
                     </div>
-                    <div class="col-md-3">
-                        <div class="d-flex gap-2">
-                            <asp:Button ID="btnSearch" runat="server" Text="Search Events" CssClass="btn btn-primary w-100 py-2 fw-bold" OnClick="btnSearch_Click" CausesValidation="false" />
-                            <asp:LinkButton ID="btnClear" runat="server" CssClass="btn btn-outline-secondary px-3" OnClick="btnClear_Click" CausesValidation="false">
-                                <i class="fa-solid fa-rotate-left"></i>
-                            </asp:LinkButton>
-                        </div>
+                    <div class="col-md-2">
+                        <asp:Button ID="btnSearch" runat="server" Text="Filter" CssClass="btn btn-primary w-100 h-100 rounded-3" style="background-color: var(--accent); border:none;" OnClick="btnSearch_Click" />
+                    </div>
+                    <div class="col-md-1">
+                        <asp:LinkButton ID="btnClear" runat="server" CssClass="btn btn-outline-secondary w-100 h-100 rounded-3" OnClick="btnClear_Click">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </asp:LinkButton>
                     </div>
                 </div>
             </div>
 
             <asp:Repeater ID="rptEvents" runat="server" OnItemCommand="rptEvents_ItemCommand">
-                <HeaderTemplate>
-                    <div class="row g-4">
-                </HeaderTemplate>
+                <HeaderTemplate><div class="row g-4 mt-2"></HeaderTemplate>
                 <ItemTemplate>
                     <div class="col-md-4 mb-4">
-                        <div class="event-card shadow-sm rounded-4">
+                        <div class="event-card">
                             <div class="event-img">
-                                <i class="fa-solid fa-image"></i>
-                                <div class="price-tag">
-                                    <%# Convert.ToInt32(Eval("AvailableSeats")) > 0 ? Eval("AvailableSeats") + " Left" : "SOLD OUT" %>
-                                </div>
+                                <i class="fa-solid fa-layer-group"></i>
+                                <div class="seats-badge"><%# Eval("AvailableSeats") %> Slots</div>
                             </div>
                             <div class="event-body">
-                                <span class="event-date">
-                                    <i class="fa-regular fa-calendar-days me-1"></i>
-                                    <%# Convert.ToDateTime(Eval("EventDate")).ToString("ddd, MMM dd • h:mm tt") %>
-                                </span>
+                                <span class="event-date"><%# Convert.ToDateTime(Eval("EventDate")).ToString("MMM dd, yyyy") %></span>
                                 <h5 class="event-title"><%# Eval("EventName") %></h5>
-                                <p class="event-info">
-                                    <i class="fa-solid fa-location-dot me-1 text-danger"></i>
-                                    <%# Eval("Location") %>
-                                </p>
-                                <div class="mt-4">
-                                    <asp:LinkButton ID="btnBook" runat="server" CssClass="btn btn-view" CommandName="Book" CommandArgument='<%# Eval("EventID") %>'>
-                                        <i class="fa-solid fa-ticket me-1"></i> Book Now
-                                    </asp:LinkButton>
-                                </div>
+                                <div class="event-meta"><i class="fa-solid fa-location-dot me-2"></i><%# Eval("Location") %></div>
+                                <asp:LinkButton ID="btnBook" runat="server" CssClass="btn-book" CommandName="Book" CommandArgument='<%# Eval("EventID") %>'>
+                                    Reserve Spot
+                                </asp:LinkButton>
                             </div>
                         </div>
                     </div>
@@ -142,17 +160,15 @@
                 <FooterTemplate>
                     </div>
                     <asp:PlaceHolder ID="phEmpty" runat="server" Visible='<%# rptEvents.Items.Count == 0 %>'>
-                        <div class="empty-state">
-                            <i class="fa-solid fa-calendar-xmark fa-4x mb-4"></i>
-                            <h3>No events found</h3>
-                            <p>Try adjusting your search filters to find what you're looking for.</p>
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-ghost fa-3x text-muted opacity-25 mb-3"></i>
+                            <h4 class="text-muted">No Available Events Found</h4>
                         </div>
                     </asp:PlaceHolder>
                 </FooterTemplate>
             </asp:Repeater>
         </div>
     </form>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

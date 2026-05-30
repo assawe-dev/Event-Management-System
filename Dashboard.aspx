@@ -8,56 +8,115 @@
     <title>Dashboard | EMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4cc9f0;
-            --success: #4cc9f0;
-            --dark: #212529;
+            --bg-dark: #0f1115;
+            --card-dark: #1c1f26;
+            --accent: #6366f1;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
-        body { font-family: 'Inter', sans-serif; background-color: #f4f7fe; }
 
-        /* Navbar */
-        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.1); padding: 15px 0; }
-        .navbar-brand { font-weight: 700; color: white !important; font-size: 1.5rem; }
-        .nav-link { font-weight: 500; color: rgba(255,255,255,0.7) !important; margin: 0 10px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: white !important; }
-        .btn-logout { border-radius: 10px; padding: 8px 20px; font-weight: 600; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+        }
 
-        /* Dashboard Header */
-        .welcome-section { background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); border-radius: 20px; padding: 40px; color: white; margin-bottom: 40px; position: relative; overflow: hidden; }
-        .welcome-section h1 { font-weight: 700; z-index: 2; position: relative; }
-        .welcome-section p { opacity: 0.9; z-index: 2; position: relative; }
-        .welcome-section i.bg-icon { position: absolute; right: -20px; bottom: -20px; font-size: 10rem; opacity: 0.1; transform: rotate(-15deg); }
+        .navbar {
+            background-color: rgba(15, 17, 21, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1f2937;
+            padding: 1rem 0;
+        }
 
-        /* Stats Cards */
-        .stat-card { border: none; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.3s; background: white; height: 100%; }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
-        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 15px; }
-        .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
-        .stat-label { color: #6c757d; font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .navbar-brand { font-weight: 800; color: white !important; letter-spacing: -0.5px; }
+        .nav-link { color: var(--text-muted) !important; font-weight: 500; transition: all 0.2s; margin: 0 0.5rem; }
+        .nav-link:hover, .nav-link.active { color: var(--accent) !important; }
 
-        /* Menu Cards */
-        .card-menu { border: none; border-radius: 20px; transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.03); height: 100%; overflow: hidden; }
-        .card-menu:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .card-icon { width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
-        .icon-admin { background: rgba(67, 97, 238, 0.1); color: var(--primary); }
-        .icon-user { background: rgba(76, 201, 240, 0.1); color: var(--accent); }
-        .btn-action { border-radius: 10px; padding: 10px 20px; font-weight: 600; width: 100%; text-align: center; display: inline-block; text-decoration: none; transition: 0.3s; }
-        .btn-admin { background: var(--primary); color: white; }
-        .btn-admin:hover { background: var(--secondary); color: white; }
-        .btn-user { background: var(--accent); color: white; }
-        .btn-user:hover { background: #3ab0d3; color: white; }
+        .welcome-card {
+            background: linear-gradient(135deg, var(--accent) 0%, #4338ca 100%);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-card h1 { font-weight: 800; margin-bottom: 0.5rem; }
+        .welcome-card .bg-icon {
+            position: absolute; right: -2rem; bottom: -2rem;
+            font-size: 12rem; opacity: 0.1; transform: rotate(-15deg);
+        }
+
+        .stat-card {
+            background-color: var(--card-dark);
+            border: 1px solid #374151;
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+
+        .stat-icon {
+            width: 48px; height: 48px; border-radius: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem; margin-bottom: 1rem;
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--accent);
+        }
+
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: white; }
+        .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        .menu-card {
+            background-color: var(--card-dark);
+            border: 1px solid #374151;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            height: 100%;
+            transition: all 0.3s;
+        }
+
+        .menu-card:hover { border-color: var(--accent); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
+
+        .btn-action {
+            background-color: var(--accent);
+            color: white;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            display: inline-block;
+            text-decoration: none;
+            transition: all 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-action:hover { background-color: #4f46e5; color: white; transform: translateY(-2px); }
+
+        .btn-logout {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 0.75rem;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover { background-color: #ef4444; color: white; }
     </style>
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="Dashboard.aspx">
-                    <i class="fa-solid fa-calendar-check me-2"></i>EMS
+                    <i class="fa-solid fa-cube me-2 text-accent" style="color: var(--accent);"></i>EMS.PRO
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
@@ -65,35 +124,25 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="Dashboard.aspx"><i class="fa-solid fa-house me-1"></i> Dashboard</a>
+                            <a class="nav-link active" href="Dashboard.aspx">Dashboard</a>
                         </li>
                         <asp:PlaceHolder ID="phAdminMenu" runat="server" Visible="false">
-                            <li class="nav-item">
-                                <a class="nav-link" href="Admin/ManageEvents.aspx"><i class="fa-solid fa-list-check me-1"></i> Manage Events</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Admin/ManageUsers.aspx"><i class="fa-solid fa-users me-1"></i> Manage Users</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Admin/ViewBookings.aspx"><i class="fa-solid fa-ticket me-1"></i> View All Bookings</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="Admin/ManageEvents.aspx">Events</a></li>
+                            <li class="nav-item"><a class="nav-link" href="Admin/ManageUsers.aspx">Users</a></li>
+                            <li class="nav-item"><a class="nav-link" href="Admin/ViewBookings.aspx">Bookings</a></li>
                         </asp:PlaceHolder>
                         <asp:PlaceHolder ID="phUserMenu" runat="server" Visible="false">
-                            <li class="nav-item">
-                                <a class="nav-link" href="User/BrowseEvents.aspx"><i class="fa-solid fa-magnifying-glass me-1"></i> Browse Events</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="User/MyBookings.aspx"><i class="fa-solid fa-ticket me-1"></i> My Bookings</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="User/BrowseEvents.aspx">Browse</a></li>
+                            <li class="nav-item"><a class="nav-link" href="User/MyBookings.aspx">My Tickets</a></li>
                         </asp:PlaceHolder>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <span class="me-3 text-secondary small fw-bold">
-                            <i class="fa-solid fa-circle-user me-1 text-primary"></i>
-                            <asp:Literal ID="litUsername" runat="server"></asp:Literal>
-                        </span>
-                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn btn-outline-danger btn-logout btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
-                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        <div class="text-end me-3">
+                            <div class="small text-muted fw-bold lh-1">USER CONTEXT</div>
+                            <div class="text-white small fw-semibold"><asp:Literal ID="litUsername" runat="server"></asp:Literal></div>
+                        </div>
+                        <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn-logout" OnClick="btnLogout_Click" CausesValidation="false">
+                            <i class="fa-solid fa-power-off"></i>
                         </asp:LinkButton>
                     </div>
                 </div>
@@ -101,103 +150,73 @@
         </nav>
 
         <div class="container mt-5 pb-5">
-            <div class="welcome-section">
-                <h1>Hello, <asp:Literal ID="litUsernameWelcome" runat="server"></asp:Literal>!</h1>
-                <p class="lead mb-0">Welcome back to the Event Management System. What would you like to do today?</p>
-                <i class="fa-solid fa-calendar-days bg-icon"></i>
+            <div class="welcome-card text-white">
+                <h1 class="display-5">Welcome, <asp:Literal ID="litUsernameWelcome" runat="server"></asp:Literal></h1>
+                <p class="lead opacity-75">Your high-performance event management workspace is ready.</p>
+                <i class="fa-solid fa-rocket bg-icon"></i>
             </div>
 
-            <!-- Statistics Section -->
-            <div class="row g-4 mb-5 pb-4">
+            <div class="row g-4 mb-5">
                 <div class="col-md-4">
-                    <div class="stat-card shadow-sm rounded-3">
-                        <div class="stat-icon bg-primary-subtle text-primary">
-                            <i class="fa-solid fa-calendar-star"></i>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-calendar-check"></i></div>
                         <div class="stat-value"><asp:Literal ID="litTotalEvents" runat="server"></asp:Literal></div>
-                        <div class="stat-label">Total Events</div>
+                        <div class="stat-label">System Events</div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="stat-card shadow-sm rounded-3">
-                        <div class="stat-icon bg-info-subtle text-info">
-                            <i class="fa-solid fa-ticket"></i>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-ticket"></i></div>
                         <div class="stat-value"><asp:Literal ID="litTotalUsers" runat="server"></asp:Literal></div>
-                        <div class="stat-label">
-                            <asp:Literal ID="litBookingsLabel" runat="server" Text="Total Bookings"></asp:Literal>
-                        </div>
+                        <div class="stat-label"><asp:Literal ID="litBookingsLabel" runat="server"></asp:Literal></div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="stat-card shadow-sm rounded-3">
-                        <div class="stat-icon bg-success-subtle text-success">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
                         <div class="stat-value"><asp:Literal ID="litBookingScope" runat="server"></asp:Literal></div>
-                        <div class="stat-label">Booking Scope</div>
+                        <div class="stat-label">Activity Scope</div>
                     </div>
                 </div>
             </div>
 
-            <div class="row g-4 justify-content-center pb-5">
+            <div class="row g-4">
                 <asp:PlaceHolder ID="phAdminCard" runat="server" Visible="false">
-                    <div class="col-md-4">
-                        <div class="card card-menu p-4 shadow-sm rounded-3">
-                            <div class="card-icon icon-admin">
-                                <i class="fa-solid fa-screwdriver-wrench"></i>
-                            </div>
-                            <h4 class="fw-bold">Admin Management</h4>
-                            <p class="text-muted mb-4">Access administrative tools to create, update, and remove events from the platform. Monitor event details and maintain the database.</p>
-                            <a href="Admin/ManageEvents.aspx" class="btn-action btn-admin">
-                                <i class="fa-solid fa-gears me-2"></i> Manage All Events
-                            </a>
+                    <div class="col-md-6">
+                        <div class="menu-card">
+                            <h3 class="fw-bold mb-3">Event Operations</h3>
+                            <p class="text-muted mb-4">Full administrative control over the event lifecycle. Deploy new conferences, workshops, and manage capacity in real-time.</p>
+                            <a href="Admin/ManageEvents.aspx" class="btn-action">Launch Command Center</a>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card card-menu p-4 shadow-sm rounded-3">
-                            <div class="card-icon icon-admin" style="background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
-                                <i class="fa-solid fa-user-shield"></i>
-                            </div>
-                            <h4 class="fw-bold">User Access</h4>
-                            <p class="text-muted mb-4">Manage platform users, update credentials, and assign roles. Ensure the right people have the right access to the EMS portal.</p>
-                            <a href="Admin/ManageUsers.aspx" class="btn-action btn-admin" style="background: #0d6efd;">
-                                <i class="fa-solid fa-users-cog me-2"></i> Manage Users
-                            </a>
+                    <div class="col-md-6">
+                        <div class="menu-card">
+                            <h3 class="fw-bold mb-3">Identity Management</h3>
+                            <p class="text-muted mb-4">Manage user permissions, authentication protocols, and organizational roles across the platform infrastructure.</p>
+                            <a href="Admin/ManageUsers.aspx" class="btn-action" style="background-color: #4f46e5;">Manage Directory</a>
                         </div>
                     </div>
                 </asp:PlaceHolder>
 
                 <asp:PlaceHolder ID="phUserCard" runat="server" Visible="false">
-                    <div class="col-md-5">
-                        <div class="card card-menu p-4 shadow-sm rounded-3">
-                            <div class="card-icon icon-user">
-                                <i class="fa-solid fa-compass"></i>
-                            </div>
-                            <h4 class="fw-bold">Explore Events</h4>
-                            <p class="text-muted mb-4">Discover upcoming conferences, workshops, and meetups. Search by name or location to find the events that interest you most.</p>
-                            <a href="User/BrowseEvents.aspx" class="btn-action btn-user">
-                                <i class="fa-solid fa-magnifying-glass me-2"></i> Browse & Book
-                            </a>
+                    <div class="col-md-6">
+                        <div class="menu-card">
+                            <h3 class="fw-bold mb-3">Discovery Engine</h3>
+                            <p class="text-muted mb-4">Explore our curated list of high-impact events. Use advanced filtering to find your next professional milestone.</p>
+                            <a href="User/BrowseEvents.aspx" class="btn-action">Explore Events</a>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="card card-menu p-4 shadow-sm rounded-3">
-                            <div class="card-icon icon-user" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
-                                <i class="fa-solid fa-ticket"></i>
-                            </div>
-                            <h4 class="fw-bold">My Bookings</h4>
-                            <p class="text-muted mb-4">View your registered events, check dates and locations, and manage your personal event calendar with ease.</p>
-                            <a href="User/MyBookings.aspx" class="btn-action btn-user" style="background: #ffc107;">
-                                <i class="fa-solid fa-list me-2"></i> View My Tickets
-                            </a>
+                    <div class="col-md-6">
+                        <div class="menu-card">
+                            <h3 class="fw-bold mb-3">Personal Portfolio</h3>
+                            <p class="text-muted mb-4">Manage your registered bookings and track your professional development journey through event attendance.</p>
+                            <a href="User/MyBookings.aspx" class="btn-action" style="background-color: #818cf8;">View My Tickets</a>
                         </div>
                     </div>
                 </asp:PlaceHolder>
             </div>
         </div>
     </form>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
