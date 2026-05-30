@@ -20,9 +20,9 @@
         }
     </script>
 </head>
-<body>
+<body class="auth-page">
     <script src="ThemeScript.js"></script>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" class="w-100">
         <button type="button" id="themeToggle" class="theme-toggle-floating">
             <i class="fa-solid fa-moon"></i>
         </button>
@@ -48,7 +48,7 @@
                 <label class="form-label">Password</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-shield-halved"></i></span>
-                    <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="••••••••"></asp:TextBox>
+                    <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="........"></asp:TextBox>
                 </div>
                 <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword" Display="Dynamic" Enabled="false"></asp:RequiredFieldValidator>
             </div>

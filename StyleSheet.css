@@ -31,6 +31,13 @@ body {
     background-color: var(--bg-body);
     color: var(--text-main);
     transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+}
+
+.auth-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Global Typography & Elements */
@@ -67,15 +74,29 @@ p, .text-muted, .small { color: var(--text-muted) !important; }
 .theme-toggle-floating:hover { border-color: var(--accent); color: var(--accent); transform: scale(1.1); }
 
 /* Cards */
-.card-custom, .menu-card, .stat-card, .login-card, .register-card, .card-table, .table-container, .search-container {
+.card-custom, .menu-card, .stat-card, .card-table, .table-container, .search-container {
     background-color: var(--bg-card) !important;
     border: 1px solid var(--border-color) !important;
     box-shadow: var(--card-shadow) !important;
     color: var(--text-main);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.login-card, .register-card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--card-shadow) !important;
+    color: var(--text-main);
+    width: 100%;
+    max-width: 420px;
+    border-radius: 1.25rem;
+    padding: 2.5rem;
+    margin: 2rem auto;
 }
 
 /* Forms */
-.form-label { color: var(--text-main) !important; font-weight: 600; }
+.form-label { color: var(--text-main) !important; font-weight: 600; font-size: 0.875rem; margin-bottom: 0.5rem; display: block; }
 .form-control, .form-select, .input-group-text {
     background-color: var(--bg-input) !important;
     border: 1px solid var(--border-color) !important;
@@ -88,13 +109,20 @@ p, .text-muted, .small { color: var(--text-muted) !important; }
 .form-control::placeholder { color: var(--text-muted) !important; opacity: 0.7; }
 
 /* Tables */
-.table { color: var(--text-main) !important; }
+.table { color: var(--text-main) !important; margin-bottom: 0; }
 .table thead th {
     background-color: var(--bg-table-header) !important;
     color: var(--text-muted) !important;
     border-bottom: 1px solid var(--border-color) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 1rem;
 }
 .table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
     border-bottom: 1px solid var(--border-color) !important;
     background-color: transparent !important;
 }
