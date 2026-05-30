@@ -9,89 +9,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0f1115;
-            --card-dark: #1c1f26;
-            --accent: #6366f1;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-        }
-
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); }
-
-        .navbar {
-            background-color: rgba(15, 17, 21, 0.9) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #1f2937;
-            padding: 1rem 0;
-        }
-
-        .navbar-brand { font-weight: 800; color: white !important; }
-        .nav-link { color: var(--text-muted) !important; font-weight: 500; transition: all 0.2s; margin: 0 0.5rem; }
-        .nav-link:hover, .nav-link.active { color: var(--accent) !important; }
-
-        .hero-section {
-            background: linear-gradient(rgba(15, 17, 21, 0.8), rgba(15, 17, 21, 0.8)), url('https://images.unsplash.com/photo-1540575861501-7ad05823c9f5?auto=format&fit=crop&q=80&w=1470');
-            background-size: cover; background-position: center; padding: 6rem 0; margin-bottom: 2rem;
-        }
-
-        .search-container {
-            background-color: var(--card-dark);
-            border: 1px solid #374151;
-            padding: 1.5rem; border-radius: 1.25rem;
-            margin-top: -4rem; position: relative; z-index: 10;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        .form-control {
-            background-color: #0f1115; border: 1px solid #374151; color: white;
-            border-radius: 0.75rem; padding: 0.75rem 1rem;
-        }
-        .form-control:focus { background-color: #0f1115; color: white; border-color: var(--accent); box-shadow: none; }
-
-        .event-card {
-            background-color: var(--card-dark); border: 1px solid #374151;
-            border-radius: 1.25rem; overflow: hidden; height: 100%;
-            transition: all 0.3s;
-        }
-        .event-card:hover { transform: translateY(-8px); border-color: var(--accent); }
-
-        .event-img {
-            height: 180px; background-color: #2d3139;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem; color: #374151; position: relative;
-        }
-
-        .seats-badge {
-            position: absolute; top: 1rem; right: 1rem;
-            background-color: rgba(99, 102, 241, 0.9);
-            color: white; padding: 0.25rem 0.75rem;
-            border-radius: 9999px; font-size: 0.75rem; font-weight: 700;
-        }
-
-        .event-body { padding: 1.5rem; }
-        .event-date { color: var(--accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
-        .event-title { font-weight: 700; font-size: 1.1rem; color: white; margin-bottom: 1rem; line-height: 1.4; }
-        .event-meta { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 0.25rem; }
-
-        .btn-book {
-            background-color: var(--accent); color: white; width: 100%;
-            border-radius: 0.75rem; padding: 0.6rem; font-weight: 600;
-            border: none; margin-top: 1rem; transition: 0.2s;
-        }
-        .btn-book:hover { background-color: #4f46e5; transform: scale(1.02); color: white; }
-
-        .btn-logout {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 0.75rem; padding: 0.5rem 1rem;
-        }
-    </style>
+    <link href="../StyleSheet.css" rel="stylesheet">
 </head>
 <body>
+    <script src="../ThemeScript.js"></script>
     <form id="form1" runat="server">
-        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <nav class="navbar navbar-expand-lg sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="../Dashboard.aspx">EMS.PRO</a>
                 <div class="collapse navbar-collapse">
@@ -104,6 +27,9 @@
                         <li class="nav-item"><a class="nav-link" href="MyBookings.aspx">My Tickets</a></li>
                     </ul>
                     <div class="d-flex align-items-center">
+                        <button type="button" id="themeToggle" class="theme-toggle">
+                            <i class="fa-solid fa-moon"></i>
+                        </button>
                         <span class="me-3 text-muted small fw-bold"><asp:Literal ID="litUsernameNav" runat="server"></asp:Literal></span>
                         <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn-logout btn-sm" OnClick="btnLogout_Click" CausesValidation="false">
                             <i class="fa-solid fa-power-off"></i>
@@ -127,7 +53,7 @@
                         <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" placeholder="Search by name, venue, or city..."></asp:TextBox>
                     </div>
                     <div class="col-md-2">
-                        <asp:Button ID="btnSearch" runat="server" Text="Filter" CssClass="btn btn-primary w-100 h-100 rounded-3" style="background-color: var(--accent); border:none;" OnClick="btnSearch_Click" />
+                        <asp:Button ID="btnSearch" runat="server" Text="Filter" CssClass="btn btn-primary w-100 h-100 rounded-3" OnClick="btnSearch_Click" />
                     </div>
                     <div class="col-md-1">
                         <asp:LinkButton ID="btnClear" runat="server" CssClass="btn btn-outline-secondary w-100 h-100 rounded-3" OnClick="btnClear_Click">
